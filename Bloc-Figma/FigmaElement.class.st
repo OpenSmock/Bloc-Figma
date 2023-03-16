@@ -4,5 +4,5 @@ Class {
 	#instVars : [
 		'storeElements'
 	],
-	#category : #FigmaToBloc
+	#category : #'Bloc-Figma'
 }

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'createRectangleBasedOnData'
 	],
-	#category : #FigmaToBloc
+	#category : #'Bloc-Figma'
 }
 
 { #category : #accessing }

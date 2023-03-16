@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'createTextBasedOnData'
 	],
-	#category : #FigmaToBloc
+	#category : #'Bloc-Figma'
 }
 
 { #category : #accessing }

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'createEllipseBasedOnData'
 	],
-	#category : #FigmaToBloc
+	#category : #'Bloc-Figma'
 }
 
 { #category : #accessing }

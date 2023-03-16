@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'createPolygonBasedOnData'
 	],
-	#category : #FigmaToBloc
+	#category : #'Bloc-Figma'
 }
 
 { #category : #accessing }

@@ -1,7 +1,7 @@
 Class {
 	#name : #FigmaJSON,
 	#superclass : #Object,
-	#category : #FigmaToBloc
+	#category : #'Bloc-Figma'
 }
 
 { #category : #accessing }
