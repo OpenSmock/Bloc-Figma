@@ -18,6 +18,9 @@ elementType = 'ELLIPSE' ifTrue:[ element:= EllipseToBloc new createEllipseBasedO
 elementType = 'FRAME' ifTrue:[ element:= ContainerToBloc new createContainerBasedOnData: aDictionary].
 elementType = 'TEXT' ifTrue:[ element:= TextToBloc new createTextBasedOnData: aDictionary].
 elementType = 'LINE' ifTrue:[ element:= LineToBloc new createLineBasedOnData: aDictionary].
+elementType = 'POLYGON' ifTrue:[ element:= PolygonToBloc new createPolygonBasedOnData: aDictionary].
+elementType = 'STAR' ifTrue:[ element:= StarToBloc new createStarBasedOnData: aDictionary].
+
 
 ^element.
 ]

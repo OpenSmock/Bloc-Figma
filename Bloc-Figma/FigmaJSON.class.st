@@ -5,19 +5,7 @@ Class {
 }
 
 { #category : #accessing }
-FigmaJSON >> getAllChildren: aDictionary andStoreThemIn: anOrderedCollection [
-	|temp|
-	temp:= aDictionary at: 'children'.
-
-temp isEmpty
-ifTrue: [^anOrderedCollection ] 
-ifFalse: [ 
-	1 to: (temp size) do:
-	[:each| self getAllChildren: (temp at: each) andStoreThemIn: ( FigmaJSON new storeElements: (CreateElement new createElement: (temp at: each)) in: anOrderedCollection ) ]]. 
-]
-
-{ #category : #accessing }
-FigmaJSON >> getAllChildrenTest: aDictionary and: anOrderedCollection [
+FigmaJSON >> getAllChildren: aDictionary and: anOrderedCollection [
 	|temp|
 	(aDictionary keys detect: [:each| 'children' match: each asString] ifNone: [nil]) isNil 
 	ifTrue: [ temp:= Array new ] 
@@ -25,9 +13,14 @@ FigmaJSON >> getAllChildrenTest: aDictionary and: anOrderedCollection [
 	
 
 	temp isEmpty 
-	ifTrue: [^anOrderedCollection] ifFalse:[1 to: (temp size) do: [:each| self getAllChildrenTest: (temp at: each) and:( self storeElements: (CreateElement new createElement: (temp at: each)) in: anOrderedCollection )]].
+	ifTrue: [^anOrderedCollection] ifFalse:[1 to: (temp size) do: [:each| self getAllChildren: (temp at: each) and:( self storeElements: (CreateElement new createElement: (temp at: each)) in: anOrderedCollection )]].
 	
  
+]
+
+{ #category : #accessing }
+FigmaJSON >> loadFonts [
+	AeFontManager globalInstance scanDirectory: 'C:/Users/T0254453/Documents/fontPackages'.
 ]
 
 { #category : #accessing }
