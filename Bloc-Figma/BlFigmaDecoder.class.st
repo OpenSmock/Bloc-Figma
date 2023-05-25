@@ -95,11 +95,12 @@ BlFigmaDecoder class >> strokesProp [
 { #category : #'as yet unclassified' }
 BlFigmaDecoder class >> typeProp [
 
-	^ #type -> [ :e :dict :loader|
+	^ #type -> [ :e :dict :loader |
 	  | type |
 	  type := dict at: #type.
 	  e userData at: self defaultMetadataName at: #type put: type.
-	  BlFigmaGeometryDecoder decode: type with: dict for: e ]
+	  type = #TEXT ifTrue: [ BlFigmaTextDecoder decode: dict for: e ]
+	  ifFalse: [ BlFigmaGeometryDecoder decode: type with: dict for: e ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -157,8 +158,7 @@ BlFigmaDecoder >> decode: dictionary loader: loader [
 { #category : #converting }
 BlFigmaDecoder >> decodeElementType: dictionary [
 
-	(dictionary at: #type) = #TEXT ifTrue: [ ^ BlTextElement new ].
-	^ BlElement new.
+	^ BlElement new
 ]
 
 { #category : #initialization }

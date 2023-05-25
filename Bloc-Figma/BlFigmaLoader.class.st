@@ -24,7 +24,7 @@ BlFigmaLoader class >> defaultExportJsonName [
 
 { #category : #actions }
 BlFigmaLoader class >> load: aLoader [
-	aLoader inspect.
+
 	^ self defaultDecoder decode: aLoader
 ]
 
