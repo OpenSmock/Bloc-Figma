@@ -52,8 +52,8 @@ BlFigmaDecoder class >> fillsProp [
 { #category : #'as yet unclassified' }
 BlFigmaDecoder class >> heightProp [
 
-	^ #height -> [ :e :dict :loader|
-	  (dict at: #type) = #GROUP ifFalse: [
+	^ #height -> [ :e :dict :loader |
+	  ({ #GROUP } includes: (dict at: #type)) ifFalse: [
 		  e constraintsDo: [ :c | c vertical exact: (dict at: #height) ] ] ]
 ]
 
@@ -106,23 +106,25 @@ BlFigmaDecoder class >> typeProp [
 { #category : #'as yet unclassified' }
 BlFigmaDecoder class >> widthProp [
 
-	^ #width -> [ :e :dict :loader|
-	  (dict at: #type) = #GROUP ifFalse: [
+	^ #width -> [ :e :dict :loader |
+	  ({ #GROUP } includes: (dict at: #type)) ifFalse: [
 		  e constraintsDo: [ :c | c horizontal exact: (dict at: #width) ] ] ]
 ]
 
 { #category : #'as yet unclassified' }
 BlFigmaDecoder class >> xProp [
 
-	^ #x -> [ :e :dict :loader|
-	  e constraintsDo: [ :c | c position: (dict at: #x) @ c position y ] ]
+	^ #x -> [ :e :dict :loader |
+	 ( { #GROUP . #FRAME } includes: (dict at: #type)) ifFalse: [
+		  e constraintsDo: [ :c | c position: (dict at: #x) @ c position y ] ] ]
 ]
 
 { #category : #'as yet unclassified' }
 BlFigmaDecoder class >> yProp [
 
 	^ #y -> [ :e :dict :loader |
-	  e constraintsDo: [ :c | c position: c position x @ (dict at: #y) ] ]
+	   ({ #GROUP. #FRAME } includes: (dict at: #type)) ifFalse: [
+		  e constraintsDo: [ :c | c position: c position x @ (dict at: #y) ] ] ]
 ]
 
 { #category : #adding }

@@ -12,7 +12,7 @@ BlFigmaVisualDecoder class >> decodeColor: aDictionnary [
 		  r: (aDictionnary at: #r)
 		  g: (aDictionnary at: #g)
 		  b: (aDictionnary at: #b).
-		aDictionnary at: #a ifPresent: [ :val | color alpha: val ].
+		aDictionnary at: #a ifPresent: [ :val | ^ color alpha: val ].
 	^ color
 ]
 
