@@ -52,8 +52,8 @@ BlFigmaDecoder class >> fillsProp [
 { #category : #'as yet unclassified' }
 BlFigmaDecoder class >> heightProp [
 
-	^ #height -> [ :e :dict :loader|
-	  (dict at: #type) = #GROUP ifFalse: [
+	^ #height -> [ :e :dict :loader |
+	  ({ #GROUP } includes: (dict at: #type)) ifFalse: [
 		  e constraintsDo: [ :c | c vertical exact: (dict at: #height) ] ] ]
 ]
 
@@ -95,33 +95,36 @@ BlFigmaDecoder class >> strokesProp [
 { #category : #'as yet unclassified' }
 BlFigmaDecoder class >> typeProp [
 
-	^ #type -> [ :e :dict :loader|
+	^ #type -> [ :e :dict :loader |
 	  | type |
 	  type := dict at: #type.
 	  e userData at: self defaultMetadataName at: #type put: type.
-	  BlFigmaGeometryDecoder decode: type with: dict for: e ]
+	  type = #TEXT ifTrue: [ BlFigmaTextDecoder decode: dict for: e ]
+	  ifFalse: [ BlFigmaGeometryDecoder decode: type with: dict for: e ] ]
 ]
 
 { #category : #'as yet unclassified' }
 BlFigmaDecoder class >> widthProp [
 
-	^ #width -> [ :e :dict :loader|
-	  (dict at: #type) = #GROUP ifFalse: [
+	^ #width -> [ :e :dict :loader |
+	  ({ #GROUP } includes: (dict at: #type)) ifFalse: [
 		  e constraintsDo: [ :c | c horizontal exact: (dict at: #width) ] ] ]
 ]
 
 { #category : #'as yet unclassified' }
 BlFigmaDecoder class >> xProp [
 
-	^ #x -> [ :e :dict :loader|
-	  e constraintsDo: [ :c | c position: (dict at: #x) @ c position y ] ]
+	^ #x -> [ :e :dict :loader |
+	 ( { #GROUP . #FRAME } includes: (dict at: #type)) ifFalse: [
+		  e constraintsDo: [ :c | c position: (dict at: #x) @ c position y ] ] ]
 ]
 
 { #category : #'as yet unclassified' }
 BlFigmaDecoder class >> yProp [
 
 	^ #y -> [ :e :dict :loader |
-	  e constraintsDo: [ :c | c position: c position x @ (dict at: #y) ] ]
+	   ({ #GROUP. #FRAME } includes: (dict at: #type)) ifFalse: [
+		  e constraintsDo: [ :c | c position: c position x @ (dict at: #y) ] ] ]
 ]
 
 { #category : #adding }
@@ -157,8 +160,7 @@ BlFigmaDecoder >> decode: dictionary loader: loader [
 { #category : #converting }
 BlFigmaDecoder >> decodeElementType: dictionary [
 
-	(dictionary at: #type) = #TEXT ifTrue: [ ^ BlTextElement new ].
-	^ BlElement new.
+	^ BlElement new
 ]
 
 { #category : #initialization }

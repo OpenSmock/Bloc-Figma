@@ -7,12 +7,8 @@ Class {
 { #category : #'as yet unclassified' }
 BlFigmaGeometryDecoder class >> decode: type with: dict for: element [
 
-	type = #DOCUMENT ifTrue: [ element clipChildren: false ].
-	type = #PAGE ifTrue: [ element clipChildren: false ].
-	type = #GROUP ifTrue: [
-		element constraintsDo: [ :c |
-			c horizontal matchParent.
-			c vertical matchParent ] ].
+	({ #DOCUMENT. #PAGE . #GROUP } includes: type) ifTrue: [
+		element clipChildren: false ].
 	type = #ELIPSE ifTrue: [ element geometry: BlEllipseGeometry new ].
 	type = #LINE ifTrue: [
 		element geometry: (self lineGeometry: dict).
