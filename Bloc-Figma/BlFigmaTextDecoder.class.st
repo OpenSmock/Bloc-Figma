@@ -17,6 +17,31 @@ BlFigmaTextDecoder class >> addLine: aString at: lineNumber withDict: dict to: e
 ]
 
 { #category : #'as yet unclassified' }
+BlFigmaTextDecoder class >> computeAlignementOf: dict for: element [
+
+	element children ifEmpty: [ ^ self ].
+	self computeVerticalAlignementOf: dict for: element.
+	self computeHorizontalAlignementOf: dict for: element.
+]
+
+{ #category : #'as yet unclassified' }
+BlFigmaTextDecoder class >> computeHorizontalAlignementOf: dict for: element [
+
+	| alignement width |
+	alignement := dict at: #textAlignHorizontal.
+	alignement = #LEFT ifTrue: [ ^ self ].
+	width := dict at: #width.
+	alignement = #CENTER ifTrue: [
+		element childrenDo: [ :each |
+			each constraintsDo: [ :c |
+				c position: (width - each size x / 2) @ c position y ] ] ].
+	alignement = 'RIGHT' ifTrue: [
+		element childrenDo: [ :each |
+			each constraintsDo: [ :c |
+				c position: width - each size x @ c position y ] ] ]
+]
+
+{ #category : #'as yet unclassified' }
 BlFigmaTextDecoder class >> computeOffsetFor: textElement withDict: dict [
 
 	| baselineOfSmall baselineOfTarget smallTextElement |
@@ -32,6 +57,23 @@ BlFigmaTextDecoder class >> computeOffsetFor: textElement withDict: dict [
 ]
 
 { #category : #'as yet unclassified' }
+BlFigmaTextDecoder class >> computeVerticalAlignementOf: dict for: element [
+
+	| alignement offsetY textHeight elementHeight |
+	alignement := dict at: #textAlignVertical.
+	alignement = #TOP ifTrue: [ ^ self ].
+
+	offsetY := 0.
+	textHeight := element children last constraints position
+	              + element children last height.
+	elementHeight := dict at: #height.
+	alignement = #CENTER ifTrue: [
+		offsetY := elementHeight - textHeight / 2 ].
+	alignement = #BOTTOM ifTrue: [ offsetY := elementHeight - textHeight ].
+	element constraintsDo: [ :c | c position: c position x @ offsetY ]
+]
+
+{ #category : #'as yet unclassified' }
 BlFigmaTextDecoder class >> decode: dict for: element [
 
 	| characters lineCount |
@@ -43,7 +85,8 @@ BlFigmaTextDecoder class >> decode: dict for: element [
 			at: lineCount
 			withDict: dict
 			to: element.
-		lineCount := lineCount + 1 ]
+		lineCount := lineCount + 1 ].
+	self computeAlignementOf: dict for: element.
 ]
 
 { #category : #'as yet unclassified' }
