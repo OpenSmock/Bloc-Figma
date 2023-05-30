@@ -31,6 +31,7 @@ BlFigmaVisualDecoder class >> decodeEffects: aDictionary [
 BlFigmaVisualDecoder class >> decodeFills: aDictionary withLoader: aLoader for: aBlElement [
 
 	| backgroundType fills |
+	(aDictionary at: #fills) ifEmpty: [ ^ self ].
 	fills := (aDictionary at: #fills) first.
 	fills
 		at: #visible
@@ -97,8 +98,12 @@ BlFigmaVisualDecoder class >> decodeImage: aFills withSource: aDictionary withLo
 
 { #category : #'as yet unclassified' }
 BlFigmaVisualDecoder class >> decodeStrokes: aDictionary [
-
-	^ BlBorder builder paint: (self decodeColor: (aDictionary at: #color));width: (aDictionary at: #strokeWeight);build
+	
+	^ BlBorder builder
+		  paint:
+			  (self decodeColor: ((aDictionary at: #strokes) first at: #color));
+		  width: (aDictionary at: #strokeWeight);
+		  build
 ]
 
 { #category : #'as yet unclassified' }

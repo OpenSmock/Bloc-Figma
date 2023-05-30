@@ -50,6 +50,21 @@ BlFigmaLoader class >> loadDirectory: aDirectory [
 ]
 
 { #category : #'as yet unclassified' }
+BlFigmaLoader class >> loadString: aString [
+
+	| jsonDictionary  pictureDictionary loader |
+	jsonDictionary := aString readStreamDo: [ :readStream |
+		                  STONJSON fromStream: readStream ].
+	pictureDictionary := Dictionary new.
+
+	loader := self new
+		          figmaDictionary: jsonDictionary;
+		          picturesDictionary: pictureDictionary;
+		          yourself.
+	^ self load: loader
+]
+
+{ #category : #'as yet unclassified' }
 BlFigmaLoader class >> loadZipFile: aString [
 
 	| zipFile decompressed |

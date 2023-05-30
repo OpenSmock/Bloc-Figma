@@ -7,9 +7,9 @@ Class {
 { #category : #'as yet unclassified' }
 BlFigmaGeometryDecoder class >> decode: type with: dict for: element [
 
-	({ #DOCUMENT. #PAGE . #GROUP } includes: type) ifTrue: [
+	({ #DOCUMENT. #PAGE. #GROUP } includes: type) ifTrue: [
 		element clipChildren: false ].
-	type = #ELIPSE ifTrue: [ element geometry: BlEllipseGeometry new ].
+	type = #ELLIPSE ifTrue: [ element geometry: BlEllipseGeometry new ].
 	type = #LINE ifTrue: [
 		element geometry: (self lineGeometry: dict).
 		element outskirts: BlOutskirts centered ].
@@ -28,7 +28,7 @@ BlFigmaGeometryDecoder class >> lineGeometry: aDictionary [
 	height := aDictionary at: #height.
 	x := aDictionary at: #x.
 	y := aDictionary at: #y.
-	^ BlLineGeometry from: (x @ y) to: ((x @ y) + (width @ height))
+	^ BlLineGeometry from: 0@0 to: (width @ height)
 ]
 
 { #category : #'as yet unclassified' }
@@ -41,7 +41,7 @@ BlFigmaGeometryDecoder class >> polygonGeometry: aDictionary [
 	vertices := (0 to: Float twoPi by: Float twoPi / pointCount)
 		            allButLast collect: [ :each |
 		            each sin @ each cos negated / 2 + 0.5 asPoint ].
-	^ BlPolygonGeometry vertices: (vertices collect: [ :each | width @ height * vertices ]).
+	^ BlPolygonGeometry vertices: width @ height * vertices.
 ]
 
 { #category : #'as yet unclassified' }
