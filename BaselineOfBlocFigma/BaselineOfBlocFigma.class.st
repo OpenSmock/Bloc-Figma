@@ -19,7 +19,7 @@ BaselineOfBlocFigma >> baseline: spec [
 		spec postLoadDoIt: #postload:package:.
 		self dependencies: spec.
 		spec
-			package: #'Bloc-Figma' with: [ spec requires: #( #Bloc ) ];
+			package: #'Bloc-Figma' with: [ spec requires: { #Bloc } ];
 			package: #'Bloc-Figma-Examples'
 			with: [ spec requires: #( #'Bloc-Figma' ) ];
 			package: #'Bloc-Figma-Tests'
