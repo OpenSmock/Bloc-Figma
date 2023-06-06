@@ -5,6 +5,16 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+BlFigmaVisualDecoder class >> cropImage: aForm for: anExtent [
+
+	self halt.
+	^ BlElement new
+		  background: (BlBackground image: (aForm scaledToSize: anExtent));
+		  size: anExtent;
+		  yourself
+]
+
+{ #category : #'as yet unclassified' }
 BlFigmaVisualDecoder class >> decodeColor: aDictionnary [
 
 	| color |
@@ -31,6 +41,7 @@ BlFigmaVisualDecoder class >> decodeEffects: aDictionary [
 BlFigmaVisualDecoder class >> decodeFills: aDictionary withLoader: aLoader for: aBlElement [
 
 	| backgroundType fills |
+	(aDictionary at: #fills) ifEmpty: [ ^ self ].
 	fills := (aDictionary at: #fills) first.
 	fills
 		at: #visible
@@ -74,31 +85,28 @@ BlFigmaVisualDecoder class >> decodeImage: aFills withSource: aDictionary withLo
 	scaleMode := aFills at: #scaleMode.
 	extent := (aDictionary at: #width) @ (aDictionary at: #height).
 	scaleMode = #FIT ifTrue: [
-		imageElement := self
-			                fitImage: image
-			                for: extent ].
+		imageElement := self fitImage: image for: extent ].
 	scaleMode = #FILL ifTrue: [
-		imageElement := self
-			                fillImage: image
-			                for: extent ].
+		imageElement := self fillImage: image for: extent ].
 	scaleMode = #TILE ifTrue: [
 		imageElement := self
 			                tileImage: imageElement
-			                sizeOf: image extent
 			                for: extent ].
 	scaleMode = #CROP ifTrue: [
-		imageElement := self
-			                cropImage: imageElement
-			                sizeOf: image extent
-			                for: extent ].
+		imageElement := self cropImage: imageElement for: extent ].
+	aLoader addElementWithImageBackground: imageElement.
 	aBlElement addChild: imageElement.
 	^ image
 ]
 
 { #category : #'as yet unclassified' }
 BlFigmaVisualDecoder class >> decodeStrokes: aDictionary [
-
-	^ BlBorder builder paint: (self decodeColor: (aDictionary at: #color));width: (aDictionary at: #strokeWeight);build
+	
+	^ BlBorder builder
+		  paint:
+			  (self decodeColor: ((aDictionary at: #strokes) first at: #color));
+		  width: (aDictionary at: #strokeWeight);
+		  build
 ]
 
 { #category : #'as yet unclassified' }
@@ -119,6 +127,16 @@ BlFigmaVisualDecoder class >> fitImage: aForm for: anExtent [
 	^ BlElement new
 		  background: (BlBackground image: image);
 		  position: offset;
+		  size: anExtent;
+		  yourself
+]
+
+{ #category : #'as yet unclassified' }
+BlFigmaVisualDecoder class >> tileImage: aForm for: anExtent [
+
+	self halt.
+	^ BlElement new
+		  background: (BlBackground image: (aForm scaledToSize: anExtent));
 		  size: anExtent;
 		  yourself
 ]

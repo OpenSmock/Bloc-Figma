@@ -3,7 +3,9 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'picturesDictionary',
-		'figmaDictionary'
+		'figmaDictionary',
+		'elementsWithImageBackground',
+		'rootElement'
 	],
 	#category : #'Bloc-Figma'
 }
@@ -25,7 +27,8 @@ BlFigmaLoader class >> defaultExportJsonName [
 { #category : #actions }
 BlFigmaLoader class >> load: aLoader [
 
-	^ self defaultDecoder decode: aLoader
+	aLoader rootElement: (self defaultDecoder decode: aLoader).
+	^ aLoader
 ]
 
 { #category : #'as yet unclassified' }
@@ -50,6 +53,21 @@ BlFigmaLoader class >> loadDirectory: aDirectory [
 ]
 
 { #category : #'as yet unclassified' }
+BlFigmaLoader class >> loadString: aString [
+
+	| jsonDictionary pictureDictionary loader |
+	jsonDictionary := aString readStreamDo: [ :readStream |
+		                  STONJSON fromStream: readStream ].
+	pictureDictionary := Dictionary new.
+
+	loader := self new
+		          figmaDictionary: jsonDictionary;
+		          picturesDictionary: pictureDictionary;
+		          yourself.
+	^ (self load: loader) rootElement
+]
+
+{ #category : #'as yet unclassified' }
 BlFigmaLoader class >> loadZipFile: aString [
 
 	| zipFile decompressed |
@@ -60,6 +78,18 @@ BlFigmaLoader class >> loadZipFile: aString [
 		                 each basename = '/' ]) first.
 
 	^ self loadDirectory: decompressed
+]
+
+{ #category : #adding }
+BlFigmaLoader >> addElementWithImageBackground: aBlElement [
+
+	self elementsWithImageBackground add: aBlElement
+]
+
+{ #category : #accessing }
+BlFigmaLoader >> elementsWithImageBackground [
+
+^ elementsWithImageBackground
 ]
 
 { #category : #accessing }
@@ -73,6 +103,12 @@ BlFigmaLoader >> figmaDictionary: anObject [
 	figmaDictionary := anObject
 ]
 
+{ #category : #initialization }
+BlFigmaLoader >> initialize [
+
+ elementsWithImageBackground := OrderedCollection new.
+]
+
 { #category : #accessing }
 BlFigmaLoader >> picturesDictionary [
 
@@ -83,4 +119,15 @@ BlFigmaLoader >> picturesDictionary [
 BlFigmaLoader >> picturesDictionary: anObject [
 
 	picturesDictionary := anObject
+]
+
+{ #category : #accessing }
+BlFigmaLoader >> rootElement [
+^ rootElement
+]
+
+{ #category : #accessing }
+BlFigmaLoader >> rootElement: anObject [
+
+	rootElement := anObject
 ]

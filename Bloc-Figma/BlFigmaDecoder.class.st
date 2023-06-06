@@ -22,6 +22,7 @@ BlFigmaDecoder class >> allProperties [
 	all add: self yProp.
 	all add: self fillsProp.
 	all add: self strokesProp.
+	all add: self effectsProp.
 	all add: self cornerRadiusProp.
 	^ all
 ]
@@ -30,15 +31,27 @@ BlFigmaDecoder class >> allProperties [
 BlFigmaDecoder class >> cornerRadiusProp [
 
 	^ #cornerRadius -> [ :e :dict :loader |
-	  e geometry:
+	  (dict at: #type) = #RECTANGLE ifTrue: [  e geometry:
 		  (BlRoundedRectangleGeometry cornerRadius:
-			   (dict at: 'cornerRadius')) ]
+			   (dict at: 'cornerRadius')) ].
+	  ]
 ]
 
 { #category : #'as yet unclassified' }
 BlFigmaDecoder class >> defaultMetadataName [
 
 	^ #figma_metadata
+]
+
+{ #category : #'as yet unclassified' }
+BlFigmaDecoder class >> effectsProp [
+
+	^ #effects -> [ :e :dict :loader |
+	  | effects |
+	  effects := dict at: #effects.
+	  effects ifNotEmpty: [
+		  e effect:
+			  (BlFigmaVisualDecoder decodeEffects: (dict at: #effects) first) ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -84,12 +97,9 @@ BlFigmaDecoder class >> opacityProp [
 { #category : #'as yet unclassified' }
 BlFigmaDecoder class >> strokesProp [
 
-	^ #effects -> [ :e :dict :loader|
-	  | effects |
-	  effects := dict at: #effects.
-	  effects ifNotEmpty: [
-		  e effect:
-			  (BlFigmaVisualDecoder decodeEffects: (dict at: #effects) first) ] ]
+	^ #strokes -> [ :e :dict :loader |
+		(dict at: #strokes) ifNotEmpty: [  e border: (BlFigmaVisualDecoder decodeStrokes: dict) ]
+	  ]
 ]
 
 { #category : #'as yet unclassified' }
