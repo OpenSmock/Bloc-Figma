@@ -47,13 +47,28 @@ BlFigmaGeometryDecoder class >> polygonGeometry: aDictionary [
 { #category : #'as yet unclassified' }
 BlFigmaGeometryDecoder class >> starGeometry: aDictionary [
 
-	| width height |
-	width := aDictionary at: #width.
-	height := aDictionary at: #height.
-	^ BlPolygonGeometry vertices: {
-						         (width * 0.5 @ (height * 0.05)).
-						         (width * 0.2 @ (height * 0.99)).
-						         (width * 0.95 @ (height * 0.39)).
-						         (width * 0.05 @ (height * 0.39)).
-						         (width * 0.8 @ (height * 0.99)) }
+	| branchesNumber pt delta vertices innerRadius radius |
+	branchesNumber := aDictionary at: #pointCount.
+
+	innerRadius := (aDictionary at: #innerRadius)
+	               * (180 - (360 / branchesNumber)).
+
+	radius := 180 - innerRadius.
+
+	vertices := OrderedCollection new.
+	delta := 0 - (Float pi / 2).
+	1 to: branchesNumber * 2 do: [ :e |
+		e odd ifTrue: [
+			pt := Point
+				      r: radius
+				      theta:
+				      delta + (2 * (e - 1) * Float pi / (branchesNumber * 2)) ].
+		e even ifTrue: [
+			pt := Point
+				      r: innerRadius
+				      theta:
+				      delta + (2 * (e - 1) * Float pi / (branchesNumber * 2)) ].
+		vertices add: pt ].
+
+	^ BlPolygonGeometry vertices: vertices
 ]
