@@ -112,10 +112,21 @@ BlFigmaVisualDecoder class >> decodeStrokes: aDictionary [
 { #category : #'as yet unclassified' }
 BlFigmaVisualDecoder class >> fillImage: aForm for: anExtent [
 
+	| offset image scale |
+	anExtent y > anExtent x
+		ifTrue: [ scale := anExtent y / aForm height ]
+		ifFalse: [ scale := anExtent x / aForm width ].
+
+	image := aForm magnify: aForm boundingBox by: scale smoothing: 2.
+	
+	anExtent y > anExtent x
+		ifTrue: [ offset := ((anExtent x / 2) - (image width / 2))@0 ]
+		ifFalse: [ offset := 0@((anExtent y / 2) - (image height / 2)) ].
+
 	^ BlElement new
-		  background: (BlBackground image: (aForm scaledToSize: anExtent));
-		  size: anExtent;
-		  yourself
+		  background: (BlBackground image: image);
+		  position: offset;
+		  size: image extent
 ]
 
 { #category : #'as yet unclassified' }
