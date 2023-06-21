@@ -79,10 +79,11 @@ BlFigmaVisualDecoder class >> decodeGradient: aDictionnary [
 { #category : #'as yet unclassified' }
 BlFigmaVisualDecoder class >> decodeImage: aFills withSource: aDictionary withLoader: aLoader for: aBlElement [
 
-	| imageElement image imageHash scaleMode extent |
+	| imageElement image imageHash scaleMode extent scalingFactor |
 	imageHash := aFills at: #imageHash.
 	image := aLoader picturesDictionary at: imageHash.
 	scaleMode := aFills at: #scaleMode.
+	scalingFactor := aFills at: #scalingFactor.
 	extent := (aDictionary at: #width) @ (aDictionary at: #height).
 	scaleMode = #FIT ifTrue: [
 		imageElement := self fitImage: image for: extent ].
@@ -90,10 +91,11 @@ BlFigmaVisualDecoder class >> decodeImage: aFills withSource: aDictionary withLo
 		imageElement := self fillImage: image for: extent ].
 	scaleMode = #TILE ifTrue: [
 		imageElement := self
-			                tileImage: imageElement
+			                tileImage: image
+			with: scalingFactor
 			                for: extent ].
 	scaleMode = #CROP ifTrue: [
-		imageElement := self cropImage: imageElement for: extent ].
+		imageElement := self cropImage: image for: extent ].
 	aLoader addElementWithImageBackground: imageElement.
 	aBlElement addChild: imageElement.
 	^ image
@@ -143,11 +145,50 @@ BlFigmaVisualDecoder class >> fitImage: aForm for: anExtent [
 ]
 
 { #category : #'as yet unclassified' }
-BlFigmaVisualDecoder class >> tileImage: aForm for: anExtent [
+BlFigmaVisualDecoder class >> tileImage: aForm with: aScalingFactor for: anExtent [ 
 
-	self halt.
-	^ BlElement new
-		  background: (BlBackground image: (aForm scaledToSize: anExtent));
-		  size: anExtent;
-		  yourself
+|  image scaledImageHeight scaledImageWidth numberToFitInWidth numberToFitInHeight firstElement element posW posH|
+
+	image := aForm magnify: aForm boundingBox by: aScalingFactor smoothing: 2.
+	
+	scaledImageHeight := image height.
+	scaledImageWidth := image width.
+	
+	numberToFitInWidth := (anExtent x/ scaledImageWidth) ceiling.
+	numberToFitInHeight := (anExtent y/ scaledImageHeight) ceiling.
+	
+	firstElement := BlElement new
+		  background: (BlBackground image: image);
+		  position: 0@0;
+		  size: image extent.
+		
+	2 to: numberToFitInHeight do: [ :j|
+			posH := (j-1)*scaledImageHeight.
+			element := BlElement new
+		  				background: (BlBackground image: image);
+						position: 0@(posH);
+		  				size: image extent.
+		
+			firstElement addChild: element.
+		 ].
+	
+	2 to: numberToFitInWidth do: [:i | 
+		posW := (i-1)*scaledImageWidth.
+		
+		1 to: numberToFitInHeight do: [ :j|
+			posH := (j-1)*scaledImageHeight.
+			element := BlElement new
+		  				background: (BlBackground image: image);
+						position: (posW)@(posH);
+		  				size: image extent.
+		
+			firstElement addChild: element.
+		 ].
+		
+		 ].
+	
+	firstElement clipChildren: false.
+	
+
+	^ firstElement
 ]
