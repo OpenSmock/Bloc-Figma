@@ -5,13 +5,24 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-BlFigmaVisualDecoder class >> cropImage: aForm for: anExtent [
+BlFigmaVisualDecoder class >> cropImage: aForm with: aTransformMatrix at: aPosition for: anExtent [
 
-	self halt.
-	^ BlElement new
-		  background: (BlBackground image: (aForm scaledToSize: anExtent));
-		  size: anExtent;
-		  yourself
+	| offset a c e f image element |
+	a := 0 - (aTransformMatrix at: 1) at: 1.
+	c := 0 - (aTransformMatrix at: 1) at: 3.
+	e := 0 - (aTransformMatrix at: 2) at: 2.
+	f := 0 - (aTransformMatrix at: 2) at: 3.
+
+	image := aForm magnify: aForm boundingBox by: 1 smoothing: 2.
+
+	offset := c * image width @ (f * image height).
+
+	element := BlElement new
+		           background: (BlBackground image: image);
+		           position: offset;
+		           size: image extent.
+
+	^ element
 ]
 
 { #category : #'as yet unclassified' }
@@ -79,12 +90,14 @@ BlFigmaVisualDecoder class >> decodeGradient: aDictionnary [
 { #category : #'as yet unclassified' }
 BlFigmaVisualDecoder class >> decodeImage: aFills withSource: aDictionary withLoader: aLoader for: aBlElement [
 
-	| imageElement image imageHash scaleMode extent scalingFactor |
+	| imageElement image imageHash scaleMode extent scalingFactor imageTransform pos |
 	imageHash := aFills at: #imageHash.
 	image := aLoader picturesDictionary at: imageHash.
 	scaleMode := aFills at: #scaleMode.
 	scalingFactor := aFills at: #scalingFactor.
+	imageTransform := aFills at: #imageTransform.
 	extent := (aDictionary at: #width) @ (aDictionary at: #height).
+	pos := (aDictionary at: #x) @ (aDictionary at: #y).
 	scaleMode = #FIT ifTrue: [
 		imageElement := self fitImage: image for: extent ].
 	scaleMode = #FILL ifTrue: [
@@ -92,10 +105,14 @@ BlFigmaVisualDecoder class >> decodeImage: aFills withSource: aDictionary withLo
 	scaleMode = #TILE ifTrue: [
 		imageElement := self
 			                tileImage: image
-			with: scalingFactor
+			                with: scalingFactor
 			                for: extent ].
 	scaleMode = #CROP ifTrue: [
-		imageElement := self cropImage: image for: extent ].
+		imageElement := self
+			                cropImage: image
+			                with: imageTransform
+			                at: pos
+			                for: extent ].
 	aLoader addElementWithImageBackground: imageElement.
 	aBlElement addChild: imageElement.
 	^ image
