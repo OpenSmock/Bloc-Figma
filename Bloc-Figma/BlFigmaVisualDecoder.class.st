@@ -51,40 +51,29 @@ BlFigmaVisualDecoder class >> decodeEffects: aDictionary [
 { #category : #'as yet unclassified' }
 BlFigmaVisualDecoder class >> decodeFills: aDictionary withLoader: aLoader for: aBlElement [
 
-	| backgroundType fills |
+	| backgroundType fills extent |
 	(aDictionary at: #fills) ifEmpty: [ ^ self ].
+	extent := (aDictionary at: #width) @ (aDictionary at: #height).
 	fills := (aDictionary at: #fills) first.
 	fills
 		at: #visible
 		ifPresent: [ :bool | bool ifFalse: [ ^ BlBackground transparent ] ].
 	backgroundType := fills at: #type.
 	backgroundType = 'GRADIENT_LINEAR' ifTrue: [
-		aBlElement background: (BlBackground paint: (self decodeGradient: fills)) ].
+		aBlElement background:
+			(BlBackground paint: (self decodeLinearGradient: fills)) ].
+	backgroundType = 'GRADIENT_RADIAL' ifTrue: [
+		aBlElement background: (BlBackground paint:
+				 (self decodeRadialGradient: fills for: extent)) ].
 	backgroundType = 'IMAGE' ifTrue: [
-			  (self
-				   decodeImage: fills
-				   withSource: aDictionary
-				   withLoader: aLoader
-				for: aBlElement) ].
+		self
+			decodeImage: fills
+			withSource: aDictionary
+			withLoader: aLoader
+			for: aBlElement ].
 	backgroundType = 'SOLID' ifTrue: [
-		aBlElement background: (BlBackground paint: (self decodeColor: (fills at: #color))) ]
-]
-
-{ #category : #'as yet unclassified' }
-BlFigmaVisualDecoder class >> decodeGradient: aDictionnary [
-
-	| stops start end |
-	stops := (aDictionnary at: #gradientStops) collect: [ :each |
-		         (each at: #position)
-		         -> (self decodeColor: (each at: #color)) ].
-	self flag: #TODO. "Start and stop"
-	start := 0 @ 0.
-	end := 0 @ 1.
-	^ BlLinearGradientPaint new
-		  stops: stops;
-		  start: start;
-		  end: end;
-		  yourself
+		aBlElement background:
+			(BlBackground paint: (self decodeColor: (fills at: #color))) ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -116,6 +105,40 @@ BlFigmaVisualDecoder class >> decodeImage: aFills withSource: aDictionary withLo
 	aLoader addElementWithImageBackground: imageElement.
 	aBlElement addChild: imageElement.
 	^ image
+]
+
+{ #category : #'as yet unclassified' }
+BlFigmaVisualDecoder class >> decodeLinearGradient: aDictionnary [
+
+	| stops start end|
+	
+	stops := (aDictionnary at: #gradientStops) collect: [ :each |
+		         (each at: #position)
+		         -> (self decodeColor: (each at: #color)) ].
+
+	start := 0 @ 0.
+	end := 0 @ 1.
+
+	^ BlLinearGradientPaint new
+		  stops: stops;
+		  start: start;
+		  end: end;
+		  yourself
+]
+
+{ #category : #'as yet unclassified' }
+BlFigmaVisualDecoder class >> decodeRadialGradient: aDictionnary for: anExtent [
+
+	| stops |
+	stops := (aDictionnary at: #gradientStops) collect: [ :each |
+		         (each at: #position)
+		         -> (self decodeColor: (each at: #color)) ].
+
+	^ BlRadialGradientPaint new
+		  stops: stops;
+		  center: anExtent / 2;
+		  radius: anExtent y / 2;
+		  yourself
 ]
 
 { #category : #'as yet unclassified' }
