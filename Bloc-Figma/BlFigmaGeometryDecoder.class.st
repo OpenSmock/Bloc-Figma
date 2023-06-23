@@ -21,6 +21,17 @@ BlFigmaGeometryDecoder class >> decode: type with: dict for: element [
 ]
 
 { #category : #'as yet unclassified' }
+BlFigmaGeometryDecoder class >> decodeRotationWith: aDictionary for: element [
+
+	| rotation |
+	rotation := (aDictionary at: #rotation) negated.
+	element transformDo: [ :t |
+		t
+			topLeftOrigin;
+			rotateBy: rotation ]
+]
+
+{ #category : #'as yet unclassified' }
 BlFigmaGeometryDecoder class >> lineGeometry: aDictionary [
 
 	| width height x y |

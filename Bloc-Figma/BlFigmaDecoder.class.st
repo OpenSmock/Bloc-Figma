@@ -24,6 +24,7 @@ BlFigmaDecoder class >> allProperties [
 	all add: self strokesProp.
 	all add: self effectsProp.
 	all add: self cornerRadiusProp.
+	all add: self rotationProp.
 	^ all
 ]
 
@@ -92,6 +93,13 @@ BlFigmaDecoder class >> nameProp [
 BlFigmaDecoder class >> opacityProp [
 
 	^ #opacity -> [ :e :dict :loader| e opacity: (dict at: #opacity) ]
+]
+
+{ #category : #'as yet unclassified' }
+BlFigmaDecoder class >> rotationProp [
+
+	^ #rotation -> [ :e :dict :loader |
+	  BlFigmaGeometryDecoder decodeRotationWith: dict for: e ]
 ]
 
 { #category : #'as yet unclassified' }

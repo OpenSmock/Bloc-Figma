@@ -73,9 +73,7 @@ BlFigmaLoader class >> loadZipFile: aString [
 	| zipFile decompressed |
 	zipFile := aString asFileReference.
 
-	decompressed := ((FileSystem zip: zipFile) open workingDirectory
-		                 allDirectories reject: [ :each |
-		                 each basename = '/' ]) first.
+	decompressed := (FileSystem zip: zipFile) open workingDirectory.
 
 	^ self loadDirectory: decompressed
 ]

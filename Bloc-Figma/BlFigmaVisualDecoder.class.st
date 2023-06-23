@@ -53,24 +53,32 @@ BlFigmaVisualDecoder class >> decodeFills: aDictionary withLoader: aLoader for: 
 
 	| backgroundType fills extent |
 	(aDictionary at: #fills) ifEmpty: [ ^ self ].
+
 	extent := (aDictionary at: #width) @ (aDictionary at: #height).
+
 	fills := (aDictionary at: #fills) first.
+
 	fills
 		at: #visible
 		ifPresent: [ :bool | bool ifFalse: [ ^ BlBackground transparent ] ].
+
 	backgroundType := fills at: #type.
+
 	backgroundType = 'GRADIENT_LINEAR' ifTrue: [
 		aBlElement background:
 			(BlBackground paint: (self decodeLinearGradient: fills)) ].
+
 	backgroundType = 'GRADIENT_RADIAL' ifTrue: [
-		aBlElement background: (BlBackground paint:
-				 (self decodeRadialGradient: fills for: extent)) ].
+		aBlElement background:
+			(BlBackground paint: (self decodeRadialGradient: fills for: extent)) ].
+
 	backgroundType = 'IMAGE' ifTrue: [
 		self
 			decodeImage: fills
 			withSource: aDictionary
 			withLoader: aLoader
 			for: aBlElement ].
+
 	backgroundType = 'SOLID' ifTrue: [
 		aBlElement background:
 			(BlBackground paint: (self decodeColor: (fills at: #color))) ]
