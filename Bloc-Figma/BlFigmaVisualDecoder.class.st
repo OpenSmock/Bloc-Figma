@@ -118,14 +118,24 @@ BlFigmaVisualDecoder class >> decodeImage: aFills withSource: aDictionary withLo
 { #category : #'as yet unclassified' }
 BlFigmaVisualDecoder class >> decodeLinearGradient: aDictionnary [
 
-	| stops start end|
+	| stops startOrigin endOrigin start end transformMatrix a b c d e f |
 	
 	stops := (aDictionnary at: #gradientStops) collect: [ :each |
 		         (each at: #position)
 		         -> (self decodeColor: (each at: #color)) ].
+	transformMatrix := aDictionnary  at: #gradientTransform.
+	a := (transformMatrix at: 1) at: 1.
+	b := (transformMatrix at: 1) at: 2.
+	c := (transformMatrix at: 1) at: 3.
+	d := (transformMatrix at: 2) at: 1.
+	e := (transformMatrix at: 2) at: 2.
+	f := (transformMatrix at: 2) at: 3.
 
-	start := 0 @ 0.
-	end := 0 @ 1.
+	startOrigin := 0 @ 0.5.
+	endOrigin := 1 @ 0.5.
+	
+	start := ((a*startOrigin x)+(b*startOrigin y)+c)@((d*startOrigin x)+(e*startOrigin y)+f).
+	end := ((a*endOrigin x)+(b*endOrigin y)+c)@((d*endOrigin x)+(e*endOrigin y)+f).
 
 	^ BlLinearGradientPaint new
 		  stops: stops;
