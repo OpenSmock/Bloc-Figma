@@ -8,12 +8,16 @@ Class {
 BlFigmaVisualDecoder class >> cropImage: aForm with: aTransformMatrix at: aPosition for: anExtent [
 
 	| offset a c e f image element |
-	a := 0 - (aTransformMatrix at: 1) at: 1.
+	a := (aTransformMatrix at: 1) at: 1.
 	c := 0 - (aTransformMatrix at: 1) at: 3.
-	e := 0 - (aTransformMatrix at: 2) at: 2.
+	e := (aTransformMatrix at: 2) at: 2.
 	f := 0 - (aTransformMatrix at: 2) at: 3.
-
-	image := aForm magnify: aForm boundingBox by: 1 smoothing: 2.
+	
+	(a>e)
+	ifTrue: [ image := aForm magnify: aForm boundingBox by: a  smoothing: 2. ].
+	
+	(e>a)
+	ifTrue: [ image := aForm magnify: aForm boundingBox by: e smoothing: 2. ].
 
 	offset := c * image width @ (f * image height).
 
@@ -66,7 +70,7 @@ BlFigmaVisualDecoder class >> decodeFills: aDictionary withLoader: aLoader for: 
 
 	backgroundType = 'GRADIENT_LINEAR' ifTrue: [
 		aBlElement background:
-			(BlBackground paint: (self decodeLinearGradient: fills)) ].
+			(BlBackground paint: (self decodeLinearGradient: fills )) ].
 
 	backgroundType = 'GRADIENT_RADIAL' ifTrue: [
 		aBlElement background:
@@ -118,19 +122,32 @@ BlFigmaVisualDecoder class >> decodeImage: aFills withSource: aDictionary withLo
 { #category : #'as yet unclassified' }
 BlFigmaVisualDecoder class >> decodeLinearGradient: aDictionnary [
 
-	| stops start end|
+	| stops start end transformMatrix a b c d e f startX startY endX endY|
 	
 	stops := (aDictionnary at: #gradientStops) collect: [ :each |
 		         (each at: #position)
 		         -> (self decodeColor: (each at: #color)) ].
-
-	start := 0 @ 0.
-	end := 0 @ 1.
-
-	^ BlLinearGradientPaint new
+	transformMatrix := aDictionnary  at: #gradientTransform.
+	a := (transformMatrix at: 1) at: 1.
+	b := (transformMatrix at: 1) at: 2.
+	c := (transformMatrix at: 1) at: 3.
+	d := (transformMatrix at: 2) at: 1.
+	e := (transformMatrix at: 2) at: 2.
+	f := (transformMatrix at: 2) at: 3.
+	
+	startX := ((a*1)+(b*0.5)+c).
+	startY := ((d*1)+(e*0.5)+f).
+	endX := ((a*0)+(b*0.5)+c).
+	endY:= ((d*0)+(e*0.5)+f).
+	end := endX @ endY.
+	start := startX @ startY.
+	
+	"start := 0.5 @ 0.
+	end := 0.5 @ 1."
+	
+	
+^ (BlLinearGradientPaint direction: start-end)
 		  stops: stops;
-		  start: start;
-		  end: end;
 		  yourself
 ]
 
