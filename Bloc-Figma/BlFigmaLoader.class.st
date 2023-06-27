@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'picturesDictionary',
-		'figmaDictionary',
+		'figmaDictionaries',
 		'elementsWithImageBackground',
 		'rootElement'
 	],
@@ -34,9 +34,9 @@ BlFigmaLoader class >> load: aLoader [
 { #category : #'as yet unclassified' }
 BlFigmaLoader class >> loadDirectory: aDirectory [
 
-	| jsonFile jsonDictionary pictureFiles pictureDictionary loader |
+	| jsonFile jsonDictionaries pictureFiles pictureDictionary loader |
 	jsonFile := aDirectory / self defaultExportJsonName.
-	jsonDictionary := jsonFile readStreamDo: [ :readStream |
+	jsonDictionaries := jsonFile readStreamDo: [ :readStream |
 		                  STONJSON fromStream: readStream ].
 	pictureFiles := aDirectory allFiles select: [ :any | any ~= jsonFile ].
 	pictureDictionary := Dictionary new.
@@ -45,8 +45,10 @@ BlFigmaLoader class >> loadDirectory: aDirectory [
 		each basenameWithoutExtension -> (Form fromFileNamed: each) ]
 		thenDo: [ :each | pictureDictionary add: each ].
 
+	jsonDictionaries isDictionary ifTrue: [ jsonDictionaries := { jsonDictionaries } ].
+
 	loader := self new
-		          figmaDictionary: jsonDictionary;
+		          figmaDictionaries: jsonDictionaries;
 		          picturesDictionary: pictureDictionary;
 		          yourself.
 	^ self load: loader
@@ -55,13 +57,13 @@ BlFigmaLoader class >> loadDirectory: aDirectory [
 { #category : #'as yet unclassified' }
 BlFigmaLoader class >> loadString: aString [
 
-	| jsonDictionary pictureDictionary loader |
-	jsonDictionary := aString readStreamDo: [ :readStream |
-		                  STONJSON fromStream: readStream ].
+	| jsonDictionaries pictureDictionary loader |
+	jsonDictionaries := aString readStreamDo: [ :readStream |
+		                    STONJSON fromStream: readStream ].
 	pictureDictionary := Dictionary new.
 
 	loader := self new
-		          figmaDictionary: jsonDictionary;
+		          figmaDictionaries: jsonDictionaries;
 		          picturesDictionary: pictureDictionary;
 		          yourself.
 	^ (self load: loader) rootElement
@@ -91,14 +93,15 @@ BlFigmaLoader >> elementsWithImageBackground [
 ]
 
 { #category : #accessing }
-BlFigmaLoader >> figmaDictionary [
-	^ figmaDictionary
+BlFigmaLoader >> figmaDictionaries [
+
+	^ figmaDictionaries
 ]
 
 { #category : #accessing }
-BlFigmaLoader >> figmaDictionary: anObject [
+BlFigmaLoader >> figmaDictionaries: aCollection [
 
-	figmaDictionary := anObject
+	figmaDictionaries := aCollection
 ]
 
 { #category : #initialization }
