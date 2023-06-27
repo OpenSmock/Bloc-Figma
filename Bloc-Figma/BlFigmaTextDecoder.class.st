@@ -7,12 +7,14 @@ Class {
 { #category : #'as yet unclassified' }
 BlFigmaTextDecoder class >> addLine: aString at: lineNumber withDict: dict to: element [
 
-	| roppedText textElement offset |
+	| roppedText textElement offset fontsize |
+	
 	roppedText := self roppedTextFrom: aString withDict: dict.
 	textElement := roppedText asElement.
 	offset := self computeOffsetFor: textElement withDict: dict.
+	fontsize := dict at: #fontSize ifAbsent: [ 10 ].
 	textElement constraints position:
-		0 @ ((dict at: #fontSize) * lineNumber + offset).
+		0 @ (fontsize * lineNumber + offset).
 	element addChild: textElement
 ]
 
@@ -93,9 +95,9 @@ BlFigmaTextDecoder class >> decode: dict for: element [
 BlFigmaTextDecoder class >> roppedTextFrom: aString withDict: dict [
 
 	|roppedText| 
-roppedText := aString asRopedText.
-	roppedText fontSize: (dict at: #fontSize).
-	roppedText attributesBuilder attribute:
-		(BlFontWeightAttribute weight: (dict at: 'fontWeight')).
-		^ roppedText
+	roppedText := aString asRopedText.
+	dict at: #fontSize ifPresent: [ :size | roppedText fontSize: size ].
+	dict at: #fontWeight ifPresent: [ :weight | roppedText attributesBuilder attribute:
+		(BlFontWeightAttribute weight: weight) ].
+	^ roppedText
 ]

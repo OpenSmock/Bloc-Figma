@@ -154,7 +154,7 @@ BlFigmaDecoder >> addAllProperties: aDictionary [
 { #category : #converting }
 BlFigmaDecoder >> decode: aLoader [
 
-	^ self decode: aLoader figmaDictionary loader: aLoader
+	^ aLoader figmaDictionaries collect: [ :dictionnary | self decode: dictionnary loader: aLoader ]
 ]
 
 { #category : #converting }
