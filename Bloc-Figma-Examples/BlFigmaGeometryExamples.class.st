@@ -1,11 +1,11 @@
 Class {
-	#name : #BlFiEllipseExamples,
+	#name : #BlFigmaGeometryExamples,
 	#superclass : #Object,
 	#category : #'Bloc-Figma-Examples'
 }
 
 { #category : #examples }
-BlFiEllipseExamples class >> ellipse [
+BlFigmaGeometryExamples class >> ellipse [
 
 	<script: '(BlFigmaLoader loadString: self ellipse) inspect'>
 	^ '{
@@ -122,7 +122,7 @@ BlFiEllipseExamples class >> ellipse [
 ]
 
 { #category : #examples }
-BlFiEllipseExamples class >> ellipseAndGradiant [
+BlFigmaGeometryExamples class >> ellipseAndGradiant [
 
 	<script: '(BlFigmaLoader loadString: self ellipseAndGradiant) inspect'>
 	^ '{
@@ -266,7 +266,7 @@ BlFiEllipseExamples class >> ellipseAndGradiant [
 ]
 
 { #category : #examples }
-BlFiEllipseExamples class >> ellipseAndShadow [
+BlFigmaGeometryExamples class >> ellipseAndShadow [
 
 	<script: '(BlFigmaLoader loadString: self ellipseAndShadow) inspect'>
 	^ '{
@@ -402,7 +402,7 @@ BlFiEllipseExamples class >> ellipseAndShadow [
 ]
 
 { #category : #examples }
-BlFiEllipseExamples class >> ellipseAndStroke [
+BlFigmaGeometryExamples class >> ellipseAndStroke [
 
 	<script: '(BlFigmaLoader loadString: self ellipseAndStroke) inspect'>
 	^ '{
@@ -536,7 +536,7 @@ BlFiEllipseExamples class >> ellipseAndStroke [
 ]
 
 { #category : #examples }
-BlFiEllipseExamples class >> line [
+BlFigmaGeometryExamples class >> line [
 
 	<script: '(BlFigmaLoader loadString: self line) inspect'>
 	^ '{
@@ -646,7 +646,7 @@ BlFiEllipseExamples class >> line [
 ]
 
 { #category : #examples }
-BlFiEllipseExamples class >> lineAndShadow [
+BlFigmaGeometryExamples class >> lineAndShadow [
 
 	<script: '(BlFigmaLoader loadString: self lineAndShadow) inspect'>
 	^ '{
@@ -775,7 +775,7 @@ BlFiEllipseExamples class >> lineAndShadow [
 ]
 
 { #category : #examples }
-BlFiEllipseExamples class >> polygon3Vertices [
+BlFigmaGeometryExamples class >> polygon3Vertices [
 
 	<script: '(BlFigmaLoader loadString: self polygon3Vertices) inspect'>
 	^ '{
@@ -888,7 +888,7 @@ BlFiEllipseExamples class >> polygon3Vertices [
 ]
 
 { #category : #examples }
-BlFiEllipseExamples class >> polygon3VerticesAndGradient [
+BlFigmaGeometryExamples class >> polygon3VerticesAndGradient [
 
 	<script: '(BlFigmaLoader loadString: self polygon3VerticesAndGradient) inspect'>
 	^ '{
@@ -1028,7 +1028,7 @@ BlFiEllipseExamples class >> polygon3VerticesAndGradient [
 ]
 
 { #category : #examples }
-BlFiEllipseExamples class >> polygon3VerticesAndShadow [
+BlFigmaGeometryExamples class >> polygon3VerticesAndShadow [
 	<script:
 	'(BlFigmaLoader loadString: self polygon3VerticesAndShadow) inspect'>
 	^ '{
@@ -1160,7 +1160,7 @@ BlFiEllipseExamples class >> polygon3VerticesAndShadow [
 ]
 
 { #category : #examples }
-BlFiEllipseExamples class >> polygon3VerticesAndStrokes [
+BlFigmaGeometryExamples class >> polygon3VerticesAndStrokes [
 
 	<script:
 	'(BlFigmaLoader loadString: self polygon3VerticesAndStrokes) inspect'>
@@ -1291,7 +1291,7 @@ BlFiEllipseExamples class >> polygon3VerticesAndStrokes [
 ]
 
 { #category : #examples }
-BlFiEllipseExamples class >> polygon5Vertices [
+BlFigmaGeometryExamples class >> polygon5Vertices [
 
 	<script: '(BlFigmaLoader loadString: self polygon5Vertices) inspect'>
 	^ '{
@@ -1404,7 +1404,7 @@ BlFiEllipseExamples class >> polygon5Vertices [
 ]
 
 { #category : #examples }
-BlFiEllipseExamples class >> polygon8Vertices [
+BlFigmaGeometryExamples class >> polygon8Vertices [
 
 	<script: '(BlFigmaLoader loadString: self polygon8Vertices) inspect'>
 	^ '{
@@ -1517,7 +1517,7 @@ BlFiEllipseExamples class >> polygon8Vertices [
 ]
 
 { #category : #examples }
-BlFiEllipseExamples class >> rectangle [
+BlFigmaGeometryExamples class >> rectangle [
 
 	<script: '(BlFigmaLoader loadString: self rectangle) inspect'>
 	^ '{
@@ -1637,7 +1637,7 @@ BlFiEllipseExamples class >> rectangle [
 ]
 
 { #category : #examples }
-BlFiEllipseExamples class >> rectangleAndGradient [
+BlFigmaGeometryExamples class >> rectangleAndGradient [
 
 	<script: '(BlFigmaLoader loadString: self rectangleAndGradient) inspect'>
 	^ '{
@@ -1784,7 +1784,7 @@ BlFiEllipseExamples class >> rectangleAndGradient [
 ]
 
 { #category : #examples }
-BlFiEllipseExamples class >> rectangleAndShadow [
+BlFigmaGeometryExamples class >> rectangleAndShadow [
 
 	<script:
 	'(BlFigmaLoader loadString: self rectangleAndShadow) inspect'>
@@ -1941,7 +1941,7 @@ BlFiEllipseExamples class >> rectangleAndShadow [
 ]
 
 { #category : #examples }
-BlFiEllipseExamples class >> rectangleAndStrokes [
+BlFigmaGeometryExamples class >> rectangleAndStrokes [
 
 	<script:
 	'(BlFigmaLoader loadString: self rectangleAndStrokes) inspect'>
@@ -2079,5 +2079,5 @@ BlFiEllipseExamples class >> rectangleAndStrokes [
 ]
 
 { #category : #'see class side' }
-BlFiEllipseExamples >> seeClassSide [ 
+BlFigmaGeometryExamples >> seeClassSide [ 
 ]

@@ -61,6 +61,9 @@ BlFigmaLoader class >> loadString: aString [
 	jsonDictionaries := aString readStreamDo: [ :readStream |
 		                    STONJSON fromStream: readStream ].
 	pictureDictionary := Dictionary new.
+	
+	jsonDictionaries isDictionary ifTrue: [
+		jsonDictionaries := { jsonDictionaries } ].
 
 	loader := self new
 		          figmaDictionaries: jsonDictionaries;
