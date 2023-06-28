@@ -66,7 +66,7 @@ BlFigmaTextDecoder class >> computeVerticalAlignementOf: dict for: element [
 	alignement = #TOP ifTrue: [ ^ self ].
 
 	offsetY := 0.
-	textHeight := element children last constraints position
+	textHeight := element children last constraints position y
 	              + element children last height.
 	elementHeight := dict at: #height.
 	alignement = #CENTER ifTrue: [
