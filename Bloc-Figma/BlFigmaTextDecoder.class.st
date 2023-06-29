@@ -61,10 +61,11 @@ BlFigmaTextDecoder class >> computeOffsetFor: textElement withDict: dict [
 { #category : #'as yet unclassified' }
 BlFigmaTextDecoder class >> computeVerticalAlignementOf: dict for: element [
 
-	| alignement offsetY textHeight elementHeight |
+	| alignement yPosition offsetY textHeight elementHeight |
 	alignement := dict at: #textAlignVertical.
 	alignement = #TOP ifTrue: [ ^ self ].
 
+	yPosition := dict at: #y.
 	offsetY := 0.
 	textHeight := element children last constraints position y
 	              + element children last height.
@@ -72,7 +73,7 @@ BlFigmaTextDecoder class >> computeVerticalAlignementOf: dict for: element [
 	alignement = #CENTER ifTrue: [
 		offsetY := elementHeight - textHeight / 2 ].
 	alignement = #BOTTOM ifTrue: [ offsetY := elementHeight - textHeight ].
-	element constraintsDo: [ :c | c position: c position x @ offsetY ]
+	element constraintsDo: [ :c | c position: c position x @ (yPosition + offsetY) ]
 ]
 
 { #category : #'as yet unclassified' }
