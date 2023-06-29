@@ -170,6 +170,7 @@ BlFigmaVisualDecoder class >> decodeRadialGradient: aDictionnary for: anExtent [
 BlFigmaVisualDecoder class >> decodeStrokes: aDictionary [
 	
 	^ BlBorder builder
+		  dashArray: (aDictionary at: #dashPattern);
 		  paint:
 			  (self decodeColor: ((aDictionary at: #strokes) first at: #color));
 		  width: (aDictionary at: #strokeWeight);
