@@ -25,6 +25,7 @@ BlFigmaDecoder class >> allProperties [
 	all add: self effectsProp.
 	all add: self cornerRadiusProp.
 	all add: self rotationProp.
+	all add: self visibilityProp.
 	^ all
 ]
 
@@ -119,6 +120,14 @@ BlFigmaDecoder class >> typeProp [
 	  e userData at: self defaultMetadataName at: #type put: type.
 	  type = #TEXT ifTrue: [ BlFigmaTextDecoder decode: dict for: e ]
 	  ifFalse: [ BlFigmaGeometryDecoder decode: type with: dict for: e ] ]
+]
+
+{ #category : #'as yet unclassified' }
+BlFigmaDecoder class >> visibilityProp [
+
+	^ #visible -> [ :e :dict :loader|
+		e visibility: BlVisibility visible.
+	  (dict at: #visible) ifFalse: [e visibility: BlVisibility hidden.]]
 ]
 
 { #category : #'as yet unclassified' }
