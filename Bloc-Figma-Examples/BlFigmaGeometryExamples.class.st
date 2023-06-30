@@ -7,7 +7,7 @@ Class {
 { #category : #examples }
 BlFigmaGeometryExamples class >> ellipse [
 
-	<script: '(BlFigmaLoader loadString: self ellipse) inspect'>
+	<script: '(BlFigmaLoader loadString: self ellipse) rootElement inspect'>
 	^ '{
 					"id": "1:2",
 					"type": "ELLIPSE",
@@ -124,7 +124,8 @@ BlFigmaGeometryExamples class >> ellipse [
 { #category : #examples }
 BlFigmaGeometryExamples class >> ellipseAndGradiant [
 
-	<script: '(BlFigmaLoader loadString: self ellipseAndGradiant) inspect'>
+	<script:
+	'(BlFigmaLoader loadString: self ellipseAndGradiant) rootElement inspect'>
 	^ '{
 					"id": "1:2",
 					"type": "ELLIPSE",
@@ -268,7 +269,7 @@ BlFigmaGeometryExamples class >> ellipseAndGradiant [
 { #category : #examples }
 BlFigmaGeometryExamples class >> ellipseAndShadow [
 
-	<script: '(BlFigmaLoader loadString: self ellipseAndShadow) inspect'>
+	<script: '(BlFigmaLoader loadString: self ellipseAndShadow) rootElement inspect'>
 	^ '{
 					"id": "1:2",
 					"type": "ELLIPSE",
@@ -404,7 +405,7 @@ BlFigmaGeometryExamples class >> ellipseAndShadow [
 { #category : #examples }
 BlFigmaGeometryExamples class >> ellipseAndStroke [
 
-	<script: '(BlFigmaLoader loadString: self ellipseAndStroke) inspect'>
+	<script: '(BlFigmaLoader loadString: self ellipseAndStroke) rootElement inspect'>
 	^ '{
 					"id": "1:2",
 					"type": "ELLIPSE",
@@ -538,7 +539,7 @@ BlFigmaGeometryExamples class >> ellipseAndStroke [
 { #category : #examples }
 BlFigmaGeometryExamples class >> line [
 
-	<script: '(BlFigmaLoader loadString: self line) inspect'>
+	<script: '(BlFigmaLoader loadString: self line) rootElement inspect'>
 	^ '{
 					"id": "1:2",
 					"type": "LINE",
@@ -648,7 +649,7 @@ BlFigmaGeometryExamples class >> line [
 { #category : #examples }
 BlFigmaGeometryExamples class >> lineAndShadow [
 
-	<script: '(BlFigmaLoader loadString: self lineAndShadow) inspect'>
+	<script: '(BlFigmaLoader loadString: self lineAndShadow) rootElement inspect'>
 	^ '{
 					"id": "1:2",
 					"type": "LINE",
@@ -777,7 +778,7 @@ BlFigmaGeometryExamples class >> lineAndShadow [
 { #category : #examples }
 BlFigmaGeometryExamples class >> polygon3Vertices [
 
-	<script: '(BlFigmaLoader loadString: self polygon3Vertices) inspect'>
+	<script: '(BlFigmaLoader loadString: self polygon3Vertices) rootElement inspect'>
 	^ '{
 					"id": "1:2",
 					"type": "POLYGON",
@@ -890,7 +891,8 @@ BlFigmaGeometryExamples class >> polygon3Vertices [
 { #category : #examples }
 BlFigmaGeometryExamples class >> polygon3VerticesAndGradient [
 
-	<script: '(BlFigmaLoader loadString: self polygon3VerticesAndGradient) inspect'>
+	<script:
+	'(BlFigmaLoader loadString: self polygon3VerticesAndGradient) rootElement inspect'>
 	^ '{
 					"id": "1:2",
 					"type": "POLYGON",
@@ -1029,8 +1031,9 @@ BlFigmaGeometryExamples class >> polygon3VerticesAndGradient [
 
 { #category : #examples }
 BlFigmaGeometryExamples class >> polygon3VerticesAndShadow [
+
 	<script:
-	'(BlFigmaLoader loadString: self polygon3VerticesAndShadow) inspect'>
+	'(BlFigmaLoader loadString: self polygon3VerticesAndShadow) rootElement inspect'>
 	^ '{
 					"id": "1:2",
 					"type": "POLYGON",
@@ -1163,7 +1166,7 @@ BlFigmaGeometryExamples class >> polygon3VerticesAndShadow [
 BlFigmaGeometryExamples class >> polygon3VerticesAndStrokes [
 
 	<script:
-	'(BlFigmaLoader loadString: self polygon3VerticesAndStrokes) inspect'>
+	'(BlFigmaLoader loadString: self polygon3VerticesAndStrokes) rootElement inspect'>
 	^ '{
 					"id": "1:2",
 					"type": "POLYGON",
@@ -1293,7 +1296,7 @@ BlFigmaGeometryExamples class >> polygon3VerticesAndStrokes [
 { #category : #examples }
 BlFigmaGeometryExamples class >> polygon5Vertices [
 
-	<script: '(BlFigmaLoader loadString: self polygon5Vertices) inspect'>
+	<script: '(BlFigmaLoader loadString: self polygon5Vertices) rootElement inspect'>
 	^ '{
 					"id": "1:2",
 					"type": "POLYGON",
@@ -1406,7 +1409,7 @@ BlFigmaGeometryExamples class >> polygon5Vertices [
 { #category : #examples }
 BlFigmaGeometryExamples class >> polygon8Vertices [
 
-	<script: '(BlFigmaLoader loadString: self polygon8Vertices) inspect'>
+	<script: '(BlFigmaLoader loadString: self polygon8Vertices) rootElement inspect'>
 	^ '{
 					"id": "1:2",
 					"type": "POLYGON",
@@ -1519,7 +1522,7 @@ BlFigmaGeometryExamples class >> polygon8Vertices [
 { #category : #examples }
 BlFigmaGeometryExamples class >> rectangle [
 
-	<script: '(BlFigmaLoader loadString: self rectangle) inspect'>
+	<script: '(BlFigmaLoader loadString: self rectangle) rootElement inspect'>
 	^ '{
 					"id": "1:2",
 					"type": "RECTANGLE",
@@ -1639,7 +1642,8 @@ BlFigmaGeometryExamples class >> rectangle [
 { #category : #examples }
 BlFigmaGeometryExamples class >> rectangleAndGradient [
 
-	<script: '(BlFigmaLoader loadString: self rectangleAndGradient) inspect'>
+	<script:
+	'(BlFigmaLoader loadString: self rectangleAndGradient) rootElement inspect'>
 	^ '{
 					"id": "1:3",
 					"type": "RECTANGLE",
@@ -1787,7 +1791,7 @@ BlFigmaGeometryExamples class >> rectangleAndGradient [
 BlFigmaGeometryExamples class >> rectangleAndShadow [
 
 	<script:
-	'(BlFigmaLoader loadString: self rectangleAndShadow) inspect'>
+	'(BlFigmaLoader loadString: self rectangleAndShadow) rootElement inspect'>
 	^ '{
 					"id": "1:2",
 					"type": "RECTANGLE",
@@ -1944,7 +1948,7 @@ BlFigmaGeometryExamples class >> rectangleAndShadow [
 BlFigmaGeometryExamples class >> rectangleAndStrokes [
 
 	<script:
-	'(BlFigmaLoader loadString: self rectangleAndStrokes) inspect'>
+	'(BlFigmaLoader loadString: self rectangleAndStrokes) rootElement inspect'>
 	^ '{
 					"id": "1:2",
 					"type": "RECTANGLE",

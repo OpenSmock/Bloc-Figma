@@ -8,152 +8,6 @@ Class {
 	#category : #'Bloc-Figma'
 }
 
-{ #category : #'as yet unclassified' }
-BlFigmaDecoder class >> allProperties [
-
-	| all |
-	all := Dictionary new.
-	all add: self idProp.
-	all add: self nameProp.
-	all add: self typeProp.
-	all add: self heightProp.
-	all add: self widthProp.
-	all add: self xProp.
-	all add: self yProp.
-	all add: self fillsProp.
-	all add: self strokesProp.
-	all add: self effectsProp.
-	all add: self cornerRadiusProp.
-	all add: self rotationProp.
-	all add: self visibilityProp.
-	^ all
-]
-
-{ #category : #'as yet unclassified' }
-BlFigmaDecoder class >> cornerRadiusProp [
-
-	^ #cornerRadius -> [ :e :dict :loader |
-	  (dict at: #type) = #RECTANGLE ifTrue: [  e geometry:
-		  (BlRoundedRectangleGeometry cornerRadius:
-			   (dict at: 'cornerRadius')) ].
-	  ]
-]
-
-{ #category : #'as yet unclassified' }
-BlFigmaDecoder class >> defaultMetadataName [
-
-	^ #figma_metadata
-]
-
-{ #category : #'as yet unclassified' }
-BlFigmaDecoder class >> effectsProp [
-
-	^ #effects -> [ :e :dict :loader |
-	  | effects |
-	  effects := dict at: #effects.
-	  effects ifNotEmpty: [
-		  e effect:
-			  (BlFigmaVisualDecoder decodeEffects: (dict at: #effects) first) ] ]
-]
-
-{ #category : #'as yet unclassified' }
-BlFigmaDecoder class >> fillsProp [
-
-	^ #fills -> [ :e :dict :loader |
-	  (dict at: #type) = #TEXT ifFalse: [
-			BlFigmaVisualDecoder decodeFills: dict withLoader: loader for: e ] ]
-]
-
-{ #category : #'as yet unclassified' }
-BlFigmaDecoder class >> heightProp [
-
-	^ #height -> [ :e :dict :loader |
-	  ({ #GROUP } includes: (dict at: #type)) ifFalse: [
-		  e constraintsDo: [ :c | c vertical exact: (dict at: #height) ] ] ]
-]
-
-{ #category : #'as yet unclassified' }
-BlFigmaDecoder class >> idProp [
-
-	^ #id -> [ :e :dict :loader|
-	  e userData at: self defaultMetadataName at: #id put: (dict at: #id) ]
-]
-
-{ #category : #'as yet unclassified' }
-BlFigmaDecoder class >> nameProp [
-
-	^ #name -> [ :e :dict :loader|
-	  e userData
-		  at: self defaultMetadataName
-		  at: #name
-		  put: (dict at: #name).
-	  e id: (dict at: #name) ]
-]
-
-{ #category : #'as yet unclassified' }
-BlFigmaDecoder class >> opacityProp [
-
-	^ #opacity -> [ :e :dict :loader| e opacity: (dict at: #opacity) ]
-]
-
-{ #category : #'as yet unclassified' }
-BlFigmaDecoder class >> rotationProp [
-
-	^ #rotation -> [ :e :dict :loader |
-	  BlFigmaGeometryDecoder decodeRotationWith: dict for: e ]
-]
-
-{ #category : #'as yet unclassified' }
-BlFigmaDecoder class >> strokesProp [
-
-	^ #strokes -> [ :e :dict :loader |
-		(dict at: #strokes) ifNotEmpty: [  e border: (BlFigmaVisualDecoder decodeStrokes: dict) ]
-	  ]
-]
-
-{ #category : #'as yet unclassified' }
-BlFigmaDecoder class >> typeProp [
-
-	^ #type -> [ :e :dict :loader |
-	  | type |
-	  type := dict at: #type.
-	  e userData at: self defaultMetadataName at: #type put: type.
-	  type = #TEXT ifTrue: [ BlFigmaTextDecoder decode: dict for: e ]
-	  ifFalse: [ BlFigmaGeometryDecoder decode: type with: dict for: e ] ]
-]
-
-{ #category : #'as yet unclassified' }
-BlFigmaDecoder class >> visibilityProp [
-
-	^ #visible -> [ :e :dict :loader|
-		e visibility: BlVisibility visible.
-	  (dict at: #visible) ifFalse: [e visibility: BlVisibility hidden.]]
-]
-
-{ #category : #'as yet unclassified' }
-BlFigmaDecoder class >> widthProp [
-
-	^ #width -> [ :e :dict :loader |
-	  ({ #GROUP } includes: (dict at: #type)) ifFalse: [
-		  e constraintsDo: [ :c | c horizontal exact: (dict at: #width) ] ] ]
-]
-
-{ #category : #'as yet unclassified' }
-BlFigmaDecoder class >> xProp [
-
-	^ #x -> [ :e :dict :loader |
-	 ( { #GROUP . #FRAME } includes: (dict at: #type)) ifFalse: [
-		  e constraintsDo: [ :c | c position: (dict at: #x) @ c position y ] ] ]
-]
-
-{ #category : #'as yet unclassified' }
-BlFigmaDecoder class >> yProp [
-
-	^ #y -> [ :e :dict :loader |
-	   ({ #GROUP. #FRAME } includes: (dict at: #type)) ifFalse: [
-		  e constraintsDo: [ :c | c position: c position x @ (dict at: #y) ] ] ]
-]
-
 { #category : #adding }
 BlFigmaDecoder >> addAllProperties: aDictionary [
 
@@ -163,7 +17,11 @@ BlFigmaDecoder >> addAllProperties: aDictionary [
 { #category : #converting }
 BlFigmaDecoder >> decode: aLoader [
 
-	^ aLoader figmaDictionaries collect: [ :dictionnary | self decode: dictionnary loader: aLoader ]
+	| decodedElements |
+	decodedElements:= aLoader figmaDictionaries collect: [ :dictionnary |
+		  self decode: dictionnary loader: aLoader ].
+	aLoader rootElement: decodedElements.
+	^ aLoader
 ]
 
 { #category : #converting }
@@ -172,7 +30,7 @@ BlFigmaDecoder >> decode: dictionary loader: loader [
 	| element |
 	element := self decodeElementType: dictionary.
 	element userData
-		at: self class defaultMetadataName
+		at: BlFigmaProperties defaultMetadataName
 		put: Dictionary new.
 	set addAll: dictionary keys.
 	dictionary keysDo: [ :key |
@@ -198,6 +56,61 @@ BlFigmaDecoder >> initialize [
 	properties at: #children put: [ :element :dict :loader |
 		element addChildren:
 			((dict at: #children) collect: [ :each | self decode: each loader: loader ]) ]
+]
+
+{ #category : #'as yet unclassified' }
+BlFigmaDecoder >> loadDirectory: aDirectory [
+
+	| jsonFile jsonDictionaries pictureFiles pictureDictionary loader |
+	jsonFile := aDirectory / BlFigmaLoader defaultExportJsonName.
+	jsonDictionaries := jsonFile readStreamDo: [ :readStream |
+		                    STONJSON fromStream: readStream ].
+	pictureFiles := aDirectory allFiles select: [ :any | any ~= jsonFile ].
+	pictureDictionary := Dictionary new.
+	pictureFiles
+		collect: [ :each |
+		each basenameWithoutExtension -> (Form fromFileNamed: each) ]
+		thenDo: [ :each | pictureDictionary add: each ].
+
+	jsonDictionaries isDictionary ifTrue: [
+		jsonDictionaries := { jsonDictionaries } ].
+
+	loader := BlFigmaLoader new
+		          figmaDictionaries: jsonDictionaries;
+		          picturesDictionary: pictureDictionary;
+		          yourself.
+	self decode: loader.
+	^ loader
+]
+
+{ #category : #'as yet unclassified' }
+BlFigmaDecoder >> loadString: aString [
+
+	| jsonDictionaries pictureDictionary loader |
+	jsonDictionaries := aString readStreamDo: [ :readStream |
+		                    STONJSON fromStream: readStream ].
+	pictureDictionary := Dictionary new.
+
+	jsonDictionaries isDictionary ifTrue: [
+		jsonDictionaries := { jsonDictionaries } ].
+
+	loader := BlFigmaLoader new
+		          figmaDictionaries: jsonDictionaries;
+		          picturesDictionary: pictureDictionary;
+		          yourself.
+	self decode: loader.
+	^ loader
+]
+
+{ #category : #'as yet unclassified' }
+BlFigmaDecoder >> loadZipFile: aString [
+
+	| zipFile decompressed |
+	zipFile := aString asFileReference.
+
+	decompressed := (FileSystem zip: zipFile) open workingDirectory.
+
+	^ self loadDirectory: decompressed
 ]
 
 { #category : #accessing }
