@@ -7,7 +7,7 @@ Class {
 { #category : #'as yet unclassified' }
 BlFigmaRobiExamples class >> rotatedRoby [
 
-	<script: '(BlFigmaLoader loadString: self rotatedRoby) inspect'>
+	<script: '(BlFigmaLoader loadString: self rotatedRoby) rootElement inspect'>
 	^ '[{
 	"id": "503:3568",
 	"type": "FRAME",
@@ -638,7 +638,8 @@ BlFigmaRobiExamples class >> rotatedRoby [
 
 { #category : #'as yet unclassified' }
 BlFigmaRobiExamples class >> simpleRoby [
-	<script: '(BlFigmaLoader loadString: self simpleRoby) inspect'>
+
+	<script: '(BlFigmaLoader loadString: self simpleRoby) rootElement inspect'>
 	^ '[{
 	"id": "503:3568",
 	"type": "FRAME",
