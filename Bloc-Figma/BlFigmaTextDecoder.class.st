@@ -95,10 +95,13 @@ BlFigmaTextDecoder class >> decode: dict for: element [
 { #category : #'as yet unclassified' }
 BlFigmaTextDecoder class >> roppedTextFrom: aString withDict: dict [
 
-	|roppedText| 
+	| roppedText |
 	roppedText := aString asRopedText.
 	dict at: #fontSize ifPresent: [ :size | roppedText fontSize: size ].
-	dict at: #fontWeight ifPresent: [ :weight | roppedText attributesBuilder attribute:
-		(BlFontWeightAttribute weight: weight) ].
+	dict at: #fontWeight ifPresent: [ :weight |
+		roppedText attributesBuilder attribute:
+			(BlFontWeightAttribute weight: weight) ].
+	dict at: #fills ifPresent: [ :fills | ((fills first at: #type) = 'SOLID') ifTrue: [ roppedText attributesBuilder attribute:
+			(BlTextForegroundAttribute color: (BlFigmaVisualDecoder decodeColor: (fills first at: #color))) ] ].
 	^ roppedText
 ]
