@@ -18,6 +18,7 @@ BlFigmaProperties class >> allProperties [
 	all add: self yProp.
 	all add: self fillsProp.
 	all add: self strokesProp.
+	all add: self strokeAlignProp.
 	all add: self effectsProp.
 	all add: self cornerRadiusProp.
 	all add: self rotationProp.
@@ -108,6 +109,17 @@ BlFigmaProperties class >> rotationProp [
 
 	^ #rotation -> [ :e :dict :loader |
 	  BlFigmaGeometryDecoder decodeRotationWith: dict for: e ]
+]
+
+{ #category : #'as yet unclassified' }
+BlFigmaProperties class >> strokeAlignProp [
+
+	^ #strokeAlign -> [ :e :dict :loader |
+	  | outskirts |
+	  outskirts := dict at: #strokeAlign.
+	  outskirts = 'INSIDE' ifTrue: [ e beOutskirtsInside ].
+	  outskirts = 'CENTER' ifTrue: [ e beOutskirtsCentered ].
+	  outskirts = 'OUTSIDE' ifTrue: [ e beOutskirtsOutside ] ]
 ]
 
 { #category : #'as yet unclassified' }
