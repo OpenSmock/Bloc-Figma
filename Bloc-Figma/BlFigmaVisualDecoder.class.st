@@ -65,6 +65,10 @@ BlFigmaVisualDecoder class >> decodeFills: aDictionary withLoader: aLoader for: 
 	fills
 		at: #visible
 		ifPresent: [ :bool | bool ifFalse: [ ^ BlBackground transparent ] ].
+		
+	fills
+		at: #opacity
+		ifPresent: [ aBlElement opacity: (fills at: #opacity)].
 
 	backgroundType := fills at: #type.
 

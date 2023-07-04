@@ -126,7 +126,7 @@ BlFigmaProperties class >> strokeAlignProp [
 BlFigmaProperties class >> strokesProp [
 
 	^ #strokes -> [ :e :dict :loader |
-		(dict at: #strokes) ifNotEmpty: [  e border: (BlFigmaVisualDecoder decodeStrokes: dict) ]
+		(dict at: #strokes) ifNotEmpty: [  dict at: #strokeWeight ifPresent:[e border: (BlFigmaVisualDecoder decodeStrokes: dict) ]]
 	  ]
 ]
 
@@ -161,7 +161,7 @@ BlFigmaProperties class >> widthProp [
 BlFigmaProperties class >> xProp [
 
 	^ #x -> [ :e :dict :loader |
-	 ( { #GROUP . #FRAME } includes: (dict at: #type)) ifFalse: [
+	 ( { #GROUP . } includes: (dict at: #type)) ifFalse: [
 		  e constraintsDo: [ :c | c position: (dict at: #x) @ c position y ] ] ]
 ]
 
@@ -169,6 +169,6 @@ BlFigmaProperties class >> xProp [
 BlFigmaProperties class >> yProp [
 
 	^ #y -> [ :e :dict :loader |
-	   ({ #GROUP. #FRAME } includes: (dict at: #type)) ifFalse: [
+	   ({ #GROUP.} includes: (dict at: #type)) ifFalse: [
 		  e constraintsDo: [ :c | c position: c position x @ (dict at: #y) ] ] ]
 ]
