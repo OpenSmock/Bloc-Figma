@@ -58,16 +58,19 @@ BlFigmaGeometryDecoder class >> polygonGeometry: aDictionary [
 { #category : #'as yet unclassified' }
 BlFigmaGeometryDecoder class >> starGeometry: aDictionary [
 
-	| branchesNumber pt delta vertices innerRadius radius |
-	branchesNumber := aDictionary at: #pointCount.
+	| branchesNumber innerRadius pt delta vertices radius diameter anglePercentage |
+	
+	branchesNumber := (aDictionary at: #pointCount).
+	anglePercentage := (aDictionary at: #innerRadius) .
+	diameter := aDictionary at: #height.
+	radius :=  diameter/ 2.
+	innerRadius := radius * anglePercentage.
 
-	innerRadius := (aDictionary at: #innerRadius)
-	               * (180 - (360 / branchesNumber)).
-
-	radius := 180 - innerRadius.
 
 	vertices := OrderedCollection new.
 	delta := 0 - (Float pi / 2).
+	
+
 	1 to: branchesNumber * 2 do: [ :e |
 		e odd ifTrue: [
 			pt := Point
