@@ -161,7 +161,7 @@ BlFigmaProperties class >> widthProp [
 BlFigmaProperties class >> xProp [
 
 	^ #x -> [ :e :dict :loader |
-	 ( { #GROUP . } includes: (dict at: #type)) ifFalse: [
+	 ( { #GROUP. } includes: (dict at: #type)) ifFalse: [
 		  e constraintsDo: [ :c | c position: (dict at: #x) @ c position y ] ] ]
 ]
 

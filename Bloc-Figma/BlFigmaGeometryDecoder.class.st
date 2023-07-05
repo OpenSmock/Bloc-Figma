@@ -82,6 +82,8 @@ BlFigmaGeometryDecoder class >> starGeometry: aDictionary [
 				      r: innerRadius
 				      theta:
 				      delta + (2 * (e - 1) * Float pi / (branchesNumber * 2)) ].
+			
+			pt := (pt x + ((aDictionary at: #width) /2))@(pt y + ((aDictionary at: #height) /2)). 
 		vertices add: pt ].
 
 	^ BlPolygonGeometry vertices: vertices
