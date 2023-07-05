@@ -98,6 +98,7 @@ BlFigmaTextDecoder class >> roppedTextFrom: aString withDict: dict [
 	| roppedText |
 	roppedText := aString asRopedText.
 	dict at: #fontSize ifPresent: [ :size | roppedText fontSize: size ].
+	dict at: #fontName ifPresent: [ :t | roppedText fontName:  (t at: #family) ].
 	dict at: #fontWeight ifPresent: [ :weight |
 		roppedText attributesBuilder attribute:
 			(BlFontWeightAttribute weight: weight) ].
