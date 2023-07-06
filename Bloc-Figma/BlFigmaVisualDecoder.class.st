@@ -121,6 +121,7 @@ BlFigmaVisualDecoder class >> decodeImage: aFills withSource: aDictionary withLo
 			                with: imageTransform
 			                at: pos
 			                for: extent ].
+	imageElement  id: ((aDictionary at: #name),' Image').
 	aLoader addElementWithImageBackground: imageElement.
 	aBlElement addChild: imageElement.
 	^ image
