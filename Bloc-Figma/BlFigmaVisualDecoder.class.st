@@ -95,8 +95,9 @@ BlFigmaVisualDecoder class >> decodeFills: aDictionary withLoader: aLoader for: 
 { #category : #'as yet unclassified' }
 BlFigmaVisualDecoder class >> decodeImage: aFills withSource: aDictionary withLoader: aLoader for: aBlElement [
 
-	| imageElement image imageHash scaleMode extent scalingFactor imageTransform pos |
+	| imageElement image imageHash scaleMode extent scalingFactor imageTransform pos type |
 	imageHash := aFills at: #imageHash.
+	type := aDictionary at: #type.
 	image := aLoader picturesDictionary at: imageHash.
 	scaleMode := aFills at: #scaleMode.
 	scalingFactor := aFills at: #scalingFactor.
@@ -106,7 +107,9 @@ BlFigmaVisualDecoder class >> decodeImage: aFills withSource: aDictionary withLo
 	scaleMode = #FIT ifTrue: [
 		imageElement := self fitImage: image for: extent ].
 	scaleMode = #FILL ifTrue: [
-		imageElement := self fillImage: image for: extent ].
+		imageElement := self fillImage: image 
+									for: extent 
+									andType: type ].
 	scaleMode = #TILE ifTrue: [
 		imageElement := self
 			                tileImage: image
@@ -182,9 +185,14 @@ BlFigmaVisualDecoder class >> decodeStrokes: aDictionary [
 ]
 
 { #category : #'as yet unclassified' }
-BlFigmaVisualDecoder class >> fillImage: aForm for: anExtent [
+BlFigmaVisualDecoder class >> fillImage: aForm for: anExtent andType: aType [
+
 
 	| offset image scale |
+	
+	(aType = 'RECTANGLE') 
+	ifTrue: [
+		
 	anExtent y > anExtent x
 		ifTrue: [ scale := anExtent y / aForm height ]
 		ifFalse: [ scale := anExtent x / aForm width ].
@@ -194,6 +202,21 @@ BlFigmaVisualDecoder class >> fillImage: aForm for: anExtent [
 	anExtent y > anExtent x
 		ifTrue: [ offset := ((anExtent x / 2) - (image width / 2))@0 ]
 		ifFalse: [ offset := 0@((anExtent y / 2) - (image height / 2)) ].
+	].
+
+	(aType = 'RECTANGLE') 
+	ifFalse: [
+		
+		aForm height < aForm width
+		ifTrue: [ scale := anExtent y / aForm height ]
+		ifFalse: [ scale := anExtent x / aForm width ].
+
+	image := aForm magnify: aForm boundingBox by: scale smoothing: 2.
+	
+	aForm height < aForm width
+		ifTrue: [ offset := ((anExtent x / 2) - (image width / 2))@0 ]
+		ifFalse: [ offset := 0@((anExtent y / 2) - (image height / 2)) ].
+	].
 
 	^ BlElement new
 		  background: (BlBackground image: image);
