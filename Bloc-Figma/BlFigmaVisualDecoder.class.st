@@ -7,17 +7,23 @@ Class {
 { #category : #'as yet unclassified' }
 BlFigmaVisualDecoder class >> cropImage: aForm with: aTransformMatrix at: aPosition for: anExtent [
 
-	| offset a c e f image element |
+	| offset a c e f image element scaleHeight scaleWidth scalingE scalingA|
 	a := (aTransformMatrix at: 1) at: 1.
 	c := 0 - (aTransformMatrix at: 1) at: 3.
 	e := (aTransformMatrix at: 2) at: 2.
 	f := 0 - (aTransformMatrix at: 2) at: 3.
 	
+	scaleHeight := e* anExtent x.
+	scaleWidth := a*anExtent y.
+	
+	scalingA := scaleWidth / aForm width.
+	scalingE := scaleHeight / aForm height.
+	
 	(a>=e)
-	ifTrue: [ image := aForm magnify: aForm boundingBox by: a  smoothing: 2. ].
+	ifTrue: [ image := aForm magnify: aForm boundingBox by: scalingA  smoothing: 2. ].
 	
 	(e>a)
-	ifTrue: [ image := aForm magnify: aForm boundingBox by: e smoothing: 2. ].
+	ifTrue: [ image := aForm magnify: aForm boundingBox by: scalingE smoothing: 2. ].
 
 	offset := c * image width @ (f * image height).
 
