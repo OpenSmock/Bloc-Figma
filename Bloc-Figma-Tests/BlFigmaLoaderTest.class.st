@@ -8,9 +8,73 @@ Class {
 BlFigmaLoaderTest >> testEllipse [
 
 	| element |
-	element := (BlFigmaLoader loadString: BlFigmaGeometryExamples ellipse)
-		           first.
+	element := (BlFigmaLoader loadString: BlFigmaGeometryExamples ellipse) rootElement first.
 	self assert: element geometry class equals: BlEllipseGeometry
+]
+
+{ #category : #tests }
+BlFigmaLoaderTest >> testImageCrop [
+
+	| element child image|
+	
+	element := (BlFigmaLoader loadStringWithTestImage: BlFigmaImagesExamples imageCrop) rootElement first.
+	
+	child := element children first.
+	image := child background image.
+	
+	self assert: child background class equals: BlImageBackground.
+	self assert: image isForm. 
+	self assert: image height equals: 249.
+	self assert: image width equals: 249.
+]
+
+{ #category : #tests }
+BlFigmaLoaderTest >> testImageFill [
+
+	| element child image|
+	element := (BlFigmaLoader loadStringWithTestImage: BlFigmaImagesExamples imageFill) rootElement
+		           first.
+		
+	child := element children first.
+	image := child background image.
+	
+	self assert: child background class equals: BlImageBackground.
+	self assert: image isForm. 
+	self assert: image height equals: 250.
+	self assert: image width equals: 250.
+]
+
+{ #category : #tests }
+BlFigmaLoaderTest >> testImageFit [
+
+	| element child image|
+	element := (BlFigmaLoader loadStringWithTestImage: BlFigmaImagesExamples imageFit) rootElement
+		           first.
+	child := element children first.
+	image := child background image.
+	
+	self assert: child background class equals: BlImageBackground.
+	self assert: image isForm. 
+	self assert: image height equals: 250.
+	self assert: image width equals: 250.
+]
+
+{ #category : #tests }
+BlFigmaLoaderTest >> testImageTile [
+
+	| element child image|
+	
+	element := (BlFigmaLoader loadStringWithTestImage: BlFigmaImagesExamples imageTile) rootElement
+	           first.
+	child := element children first.
+	image := child background image.
+	
+	self assert: child background class equals: BlImageBackground.
+	self assert: child hasChildren.
+	self assert: child children size equals: 3.
+	self assert: image isForm. 
+	self assert: image height equals: 125.
+	self assert: image width equals: 125.
 ]
 
 { #category : #tests }
@@ -18,7 +82,7 @@ BlFigmaLoaderTest >> testSimpleRoby [
 
 	| background roby redEye greenEye |
 	background := (BlFigmaLoader loadString:
-		               BlFigmaRobiExamples simpleRoby) first.
+		               BlFigmaRobiExamples simpleRoby) rootElement first.
 	background computeLayout.
 	self assert: background id asSymbol equals: #background.
 	self assert: background children size equals: 1.
