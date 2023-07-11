@@ -13,7 +13,7 @@ BlFigmaVisualDecoder class >> cropImage: aForm with: aTransformMatrix at: aPosit
 	e := (aTransformMatrix at: 2) at: 2.
 	f := 0 - (aTransformMatrix at: 2) at: 3.
 	
-	(a>e)
+	(a>=e)
 	ifTrue: [ image := aForm magnify: aForm boundingBox by: a  smoothing: 2. ].
 	
 	(e>a)
