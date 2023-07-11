@@ -13,10 +13,10 @@ BlFigmaVisualDecoder class >> cropImage: aForm with: aTransformMatrix at: aPosit
 	e := (aTransformMatrix at: 2) at: 2.
 	f := 0 - (aTransformMatrix at: 2) at: 3.
 	
-	scaleHeight := e* anExtent x.
-	scaleWidth := a*anExtent y.
+	scaleHeight := anExtent y/e.
+	scaleWidth := anExtent x/a.
 	
-	scalingA := scaleWidth / aForm width.
+	scalingA := scaleWidth / aForm width .
 	scalingE := scaleHeight / aForm height.
 	
 	(a>=e)
