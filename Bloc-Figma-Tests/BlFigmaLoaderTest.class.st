@@ -32,6 +32,9 @@ BlFigmaLoaderTest >> testImageCrop [
 		assert: element geometry class
 		equals: BlRoundedRectangleGeometry.
 	self assert: child background class equals: BlImageBackground.
+	self assert: child size equals: 249 @ 249.
+	self assert: child position equals: -99.60000148415565 @ -150.3960079550743.
+
 	self assert: image isForm.
 	self assert: image height equals: 249.
 	self assert: image width equals: 249
@@ -57,6 +60,9 @@ BlFigmaLoaderTest >> testImageFill [
 		assert: element geometry class
 		equals: BlRoundedRectangleGeometry.
 	self assert: child background class equals: BlImageBackground.
+	self assert: child size equals: 250 @ 250.
+	self assert: child position equals: 0 @ 0.
+	
 	self assert: image isForm.
 	self assert: image height equals: 250.
 	self assert: image width equals: 250
@@ -81,6 +87,8 @@ BlFigmaLoaderTest >> testImageFit [
 		assert: element geometry class
 		equals: BlRoundedRectangleGeometry.
 	self assert: child background class equals: BlImageBackground.
+	self assert: child size equals: 250 @ 250.
+	self assert: child position equals: 0 @ 0.
 	self assert: image isForm.
 	self assert: image height equals: 250.
 	self assert: image width equals: 250
