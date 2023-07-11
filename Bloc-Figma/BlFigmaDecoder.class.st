@@ -103,6 +103,45 @@ BlFigmaDecoder >> loadString: aString [
 ]
 
 { #category : #'as yet unclassified' }
+BlFigmaDecoder >> loadStringWithTestImage: aString [
+
+	| jsonDictionaries pictureDictionary loader form isBlack size morph stringMorph|
+	jsonDictionaries := aString readStreamDo: [ :readStream |
+		                    STONJSON fromStream: readStream ].
+	pictureDictionary := Dictionary new.
+	
+	form := Morph new extent: 250 @ 250.
+isBlack := true.
+size := 50.
+
+0 to: 4 do: [ :i | 0 to: 4 do: [ :j |
+                               morph := Morph new extent: size asPoint; position: (i * size) @ (j * size); yourself.
+                               stringMorph := (i printString , '@' , j printString) asMorph position: (i * size) @ (j * size).
+                               morph color: (isBlack ifTrue: [ Color black ]
+                               ifFalse: [ Color white ]).
+                               stringMorph color: (isBlack ifFalse: [ Color black ]
+                               ifTrue: [ Color white ]).
+                               isBlack := isBlack not.
+                               morph addMorph: stringMorph.
+                               form addMorph: morph ] ].
+
+	form:= form asForm.
+
+	pictureDictionary at: 'ca6ff2687eea1c8fb81aaa8dbbcd4a60e1c568d4' put: form.
+
+	jsonDictionaries isDictionary ifTrue: [
+		jsonDictionaries := { jsonDictionaries } ].
+
+	loader := BlFigmaLoader new
+		          figmaDictionaries: jsonDictionaries;
+		          picturesDictionary: pictureDictionary;
+		          yourself.
+	self decode: loader.
+	^ loader
+	
+]
+
+{ #category : #'as yet unclassified' }
 BlFigmaDecoder >> loadZipFile: aString [
 
 	| zipFile decompressed |

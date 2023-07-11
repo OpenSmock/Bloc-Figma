@@ -45,6 +45,12 @@ BlFigmaLoader class >> loadString: aString [
 ]
 
 { #category : #'as yet unclassified' }
+BlFigmaLoader class >> loadStringWithTestImage: aString [
+
+^ self defaultDecoder loadStringWithTestImage: aString
+]
+
+{ #category : #'as yet unclassified' }
 BlFigmaLoader class >> loadZipFile: aString [
 
 	^ self defaultDecoder loadZipFile: aString
