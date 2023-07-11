@@ -18,15 +18,15 @@ BlFigmaLoaderTest >> testSimpleRoby [
 	self assert: roby id asSymbol equals: #roby.
 	self assert: roby children size equals: 2.
 	self assert: roby size equals: 100 @ 100.
-	self assert: roby position equals: 50 @ 50.
-	redEye := roby children at: 1.
+	self assert: roby position equals: 75 @ 75.
+	redEye := roby children at: 2.
 	self assert: redEye id asSymbol equals: #redEye.
 	self assert: redEye children size equals: 0.
 	self assert: redEye size equals: 25 @ 25.
 	self assert: redEye position equals: 10 @ 10.
-	greenEye := roby children at: 2.
+	greenEye := roby children at: 1.
 	self assert: greenEye id asSymbol equals: #greenEye.
 	self assert: greenEye children size equals: 0.
 	self assert: greenEye size equals: 25 @ 25.
-	self assert: greenEye position equals: 65 @ 10.
+	self assert: greenEye position equals: 65 @ 10
 ]
