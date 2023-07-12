@@ -122,10 +122,10 @@ BlFigmaGeometryExamples class >> ellipse [
 ]
 
 { #category : #examples }
-BlFigmaGeometryExamples class >> ellipseAndGradiant [
+BlFigmaGeometryExamples class >> ellipseAndGradient [
 
 	<script:
-	'(BlFigmaLoader loadString: self ellipseAndGradiant) rootElement inspect'>
+	'(BlFigmaLoader loadString: self ellipseAndGradient) rootElement inspect'>
 	^ '{
 					"id": "1:2",
 					"type": "ELLIPSE",
