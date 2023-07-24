@@ -13,7 +13,8 @@ BlFigmaPropertiesReplaceInstances class >> buildPlaceHolder: aBlElement [
 		layout: BlFrameLayout new;
 		yourself.
 	aBlElement addChild:
-		('Component WIP - inspect it then userData to see more informations.' asRopedText asElement constraintsDo: [ :c |
+		('Component Work In Progress - inspect it then userData to see more informations.'
+			 asRopedText asElement constraintsDo: [ :c |
 			 c frame horizontal alignCenter.
 			 c frame vertical alignCenter ])
 ]
@@ -23,8 +24,7 @@ BlFigmaPropertiesReplaceInstances class >> fillsProp [
 
 	^ #fills -> [ :e :dict :loader |
 	  (dict at: #type) = #INSTANCE
-		  ifTrue: [ self buildPlaceHolder: e.
-			  ]
+		  ifTrue: [ self buildPlaceHolder: e ]
 		  ifFalse: [
 			  ({ #TEXT } includes: (dict at: #type)) ifFalse: [
 				  BlFigmaVisualDecoder decodeFills: dict withLoader: loader for: e ] ] ]

@@ -17,21 +17,29 @@ BlFigmaDecoder >> addAllProperties: aDictionary [
 { #category : #converting }
 BlFigmaDecoder >> decode: aLoader [
 
-	| decodedElements |
-	decodedElements:= aLoader figmaDictionaries collect: [ :dictionnary |
-		  self decode: dictionnary loader: aLoader ].
+	| decodedElements|
+	decodedElements := aLoader figmaDictionaries collect: [ :dictionnary |
+		                   self decode: dictionnary loader: aLoader ].
 	aLoader rootElement: decodedElements.
+
 	^ aLoader
 ]
 
 { #category : #converting }
 BlFigmaDecoder >> decode: dictionary loader: loader [
 
-	| element |
+	| element data return |
 	element := self decodeElementType: dictionary.
+	data := OrderedCollection new.
+	return := self findInstanceChildrenAndSendData: dictionary and: data.
+
 	element userData
 		at: BlFigmaProperties defaultMetadataName
 		put: Dictionary new.
+	element userData
+		at: #instance_metadata
+		put: data.
+
 	set addAll: dictionary keys.
 	dictionary keysDo: [ :key |
 		self properties
@@ -46,6 +54,34 @@ BlFigmaDecoder >> decode: dictionary loader: loader [
 BlFigmaDecoder >> decodeElementType: dictionary [
 
 	^ BlElement new
+]
+
+{ #category : #accessing }
+BlFigmaDecoder >> findInstanceChildrenAndSendData: aDictionary and: data [
+
+	| temp |
+	(aDictionary keys
+		 detect: [ :each | 'children' match: each asString ]
+		 ifNone: [ nil ]) isNil
+		ifTrue: [ temp := Array new ]
+		ifFalse: [ temp := aDictionary at: 'children' ].
+
+
+	temp isEmpty
+		ifTrue: [ ^ data ]
+		ifFalse: [
+			1 to: temp size do: [ :each |
+				((temp at: each) at: 'type') = 'FRAME'
+				| (((temp at: each) at: 'type') = 'INSTANCE')
+					ifFalse: [
+						self
+							findInstanceChildrenAndSendData: (temp at: each)
+							and:
+							(self
+								 storeElements: (self sendBackData: (temp at: each))
+								 in: data) ]
+					ifTrue: [
+					self findInstanceChildrenAndSendData: (temp at: each) and: data ] ] ]
 ]
 
 { #category : #initialization }
@@ -142,6 +178,22 @@ BlFigmaDecoder >> loadZipFile: aString [
 BlFigmaDecoder >> properties [
 
 	^ properties
+]
+
+{ #category : #accessing }
+BlFigmaDecoder >> sendBackData: aDictionary [
+
+	(aDictionary at: #type) = 'TEXT' ifTrue: [
+		^ aDictionary at: #characters ].
+	(aDictionary at: #type) = 'VECTOR' ifTrue: [
+		^ aDictionary at: #vectorPaths ]
+]
+
+{ #category : #accessing }
+BlFigmaDecoder >> storeElements: aBlElementoraBlText in: aOrderedCollection [
+
+	aOrderedCollection addLast: aBlElementoraBlText.
+	^ aOrderedCollection
 ]
 
 { #category : #accessing }
