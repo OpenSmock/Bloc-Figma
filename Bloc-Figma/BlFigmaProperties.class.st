@@ -24,6 +24,7 @@ BlFigmaProperties class >> allProperties [
 	all add: self rotationProp.
 	all add: self visibilityProp.
 	all add: self componentPropertiesProp.
+	all add: self layoutsProp.
 	^ all
 ]
 
@@ -85,6 +86,16 @@ BlFigmaProperties class >> idProp [
 
 	^ #id -> [ :e :dict :loader|
 	  e userData at: self defaultMetadataName at: #id put: (dict at: #id) ]
+]
+
+{ #category : #'as yet unclassified' }
+BlFigmaProperties class >> layoutsProp [
+
+	^ #layoutGrids -> [ :e :dict :loader |
+	
+	
+		  BlFigmaLayoutDecoder decodeLayouts: dict for: e ] 
+
 ]
 
 { #category : #'as yet unclassified' }
