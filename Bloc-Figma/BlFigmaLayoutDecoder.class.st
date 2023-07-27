@@ -99,9 +99,7 @@ BlFigmaLayoutDecoder class >> decodeWrapAutoLayout: aDictionary [
 		  verticalAlignment:
 			  (BlFigmaLayoutDecoder decodeVerticalAlignment: aDictionary);
 		  horizontalAlignment:
-			  (BlFigmaLayoutDecoder decodeHorizontalAlignment: aDictionary);
-		  spacingBreadthOf:
-					   (aDictionary at: #itemSpacing)
+			  (BlFigmaLayoutDecoder decodeHorizontalAlignment: aDictionary)
 ]
 
 { #category : #'as yet unclassified' }
