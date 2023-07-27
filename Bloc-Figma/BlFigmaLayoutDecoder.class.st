@@ -5,7 +5,18 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-BlFigmaLayoutDecoder class >> decodeAutoLayout: aDictionary [
+BlFigmaLayoutDecoder class >> decodeHorizontalAlignment: aDictionary [
+
+	(aDictionary at: #counterAxisAlignItems) = 'MIN' ifTrue: [
+		^ BlElementAlignment horizontal start ].
+	(aDictionary at: #counterAxisAlignItems) = 'CENTER' ifTrue: [
+		^ BlElementAlignment horizontal center ].
+	(aDictionary at: #counterAxisAlignItems) = 'MAX' ifTrue: [
+		^ BlElementAlignment horizontal end ]
+]
+
+{ #category : #'as yet unclassified' }
+BlFigmaLayoutDecoder class >> decodeHorizontalVerticalAutoLayout: aDictionary [
 
 	(aDictionary at: #layoutMode) = 'HORIZONTAL' ifTrue: [
 		^ BlLinearLayout new
@@ -26,17 +37,6 @@ BlFigmaLayoutDecoder class >> decodeAutoLayout: aDictionary [
 ]
 
 { #category : #'as yet unclassified' }
-BlFigmaLayoutDecoder class >> decodeHorizontalAlignment: aDictionary [
-
-	(aDictionary at: #counterAxisAlignItems) = 'MIN' ifTrue: [
-		^ BlElementAlignment horizontal start ].
-	(aDictionary at: #counterAxisAlignItems) = 'CENTER' ifTrue: [
-		^ BlElementAlignment horizontal center ].
-	(aDictionary at: #counterAxisAlignItems) = 'MAX' ifTrue: [
-		^ BlElementAlignment horizontal end ]
-]
-
-{ #category : #'as yet unclassified' }
 BlFigmaLayoutDecoder class >> decodeLayouts: aDictionary for: aBlElement [
 
 	| auto padding |
@@ -45,12 +45,20 @@ BlFigmaLayoutDecoder class >> decodeLayouts: aDictionary for: aBlElement [
 			 detect: [ :each | 'inferredAutoLayout' match: each asString ]
 			 ifNone: [ nil ]) isNil ifFalse: [
 			auto := aDictionary at: #inferredAutoLayout.
-			
-			(auto at: #itemSpacing) =0 ifFalse: [  
-			padding := self decodePadding: auto.
-			aBlElement
-				layout: (self decodeAutoLayout: auto);
-				padding: padding ] ]].
+
+			(aDictionary at: #layoutWrap) = 'NO_WRAP' ifTrue: [
+				(auto at: #itemSpacing) = 0 ifFalse: [
+					padding := self decodePadding: auto.
+					aBlElement
+						layout: (self decodeHorizontalVerticalAutoLayout: auto);
+						padding: padding ] ].
+
+			(aDictionary at: #layoutWrap) = 'WRAP' ifTrue: [
+				(auto at: #itemSpacing) = 0 ifFalse: [
+					padding := self decodeWrapPadding: auto.
+					aBlElement
+						layout: (self decodeWrapAutoLayout: auto);
+						padding: padding ] ] ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -82,4 +90,36 @@ BlFigmaLayoutDecoder class >> decodeVerticalAlignment: aDictionary [
 		^ BlElementAlignment vertical center ].
 	(aDictionary at: #primaryAxisAlignItems) = 'MAX' ifTrue: [
 		^ BlElementAlignment vertical end ]
+]
+
+{ #category : #'as yet unclassified' }
+BlFigmaLayoutDecoder class >> decodeWrapAutoLayout: aDictionary [
+
+	^ BlFlowLayout new
+		  verticalAlignment:
+			  (BlFigmaLayoutDecoder decodeVerticalAlignment: aDictionary);
+		  horizontalAlignment:
+			  (BlFigmaLayoutDecoder decodeHorizontalAlignment: aDictionary);
+		  spacingBreadthOf:
+					   (aDictionary at: #itemSpacing)
+]
+
+{ #category : #'as yet unclassified' }
+BlFigmaLayoutDecoder class >> decodeWrapPadding: aDictionary [
+
+	| shift |
+	shift := (aDictionary at: #itemSpacing).
+	(aDictionary at: #layoutMode) = 'HORIZONTAL' ifTrue: [
+		^ BlInsets new
+			  initializeTop: (aDictionary at: #paddingTop)
+			  right: (aDictionary at: #paddingRight)
+			  bottom: (aDictionary at: #paddingBottom)
+			  left: (aDictionary at: #paddingLeft) + shift ].
+
+	(aDictionary at: #layoutMode) = 'VERTICAL' ifTrue: [
+		^ BlInsets new
+			  initializeTop: (aDictionary at: #paddingTop) + shift
+			  right: (aDictionary at: #paddingRight)
+			  bottom: (aDictionary at: #paddingBottom)
+			  left: (aDictionary at: #paddingLeft) ]
 ]
