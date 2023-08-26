@@ -40,25 +40,25 @@ BlFigmaLayoutDecoder class >> decodeHorizontalVerticalAutoLayout: aDictionary [
 BlFigmaLayoutDecoder class >> decodeLayouts: aDictionary for: aBlElement [
 
 	| auto padding |
-	(aDictionary at: #type) = 'FRAME' ifTrue: [
-		(aDictionary keys
-			 detect: [ :each | 'inferredAutoLayout' match: each asString ]
-			 ifNone: [ nil ]) isNil ifFalse: [
-			auto := aDictionary at: #inferredAutoLayout.
+	(aDictionary at: #type) = 'FRAME' ifFalse:[ ^ self ].
+	
+	(aDictionary at: #inferredAutoLayout ifAbsent:[ nil ]) isNil ifFalse: [
+		
+		auto := aDictionary at: #inferredAutoLayout.
 
-			(aDictionary at: #layoutWrap) = 'NO_WRAP' ifTrue: [
-				(auto at: #itemSpacing) = 0 ifFalse: [
-					padding := self decodePadding: auto.
-					aBlElement
-						layout: (self decodeHorizontalVerticalAutoLayout: auto);
-						padding: padding ] ].
+		(aDictionary at: #layoutWrap) = 'NO_WRAP' ifTrue: [
+			(auto at: #itemSpacing) = 0 ifFalse: [
+				padding := self decodePadding: auto.
+				aBlElement
+					layout: (self decodeHorizontalVerticalAutoLayout: auto);
+					padding: padding ] ].
 
-			(aDictionary at: #layoutWrap) = 'WRAP' ifTrue: [
-				(auto at: #itemSpacing) = 0 ifFalse: [
-					padding := self decodeWrapPadding: auto.
+		(aDictionary at: #layoutWrap) = 'WRAP' ifTrue: [
+			(auto at: #itemSpacing) = 0 ifFalse: [
+			padding := self decodeWrapPadding: auto.
 					aBlElement
-						layout: (self decodeWrapAutoLayout: auto);
-						padding: padding ] ] ] ]
+					layout: (self decodeWrapAutoLayout: auto);
+					padding: padding ] ] ]
 ]
 
 { #category : #'as yet unclassified' }
