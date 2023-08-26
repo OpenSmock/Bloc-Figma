@@ -8,53 +8,58 @@ Class {
 BlFigmaLoaderTest >> testRotatedRoby [
 
 	| background roby redEye greenEye |
-	background := (BlFigmaLoader loadString:
-		               BlFigmaRobiExamples simpleRoby) rootElement first.
+	background := (BlFigmaLoader loadString: BlFigmaRobiExamples rotatedRoby) rootElement first.
 	background computeLayout.
 	
 	self assert: background id asSymbol equals: #background.
 	self assert: background children size equals: 1.
 	self assert: background size equals: 250 @ 250.
+	
 	roby := background children at: 1.
 	self assert: roby id asSymbol equals: #roby.
 	self assert: roby children size equals: 2.
 	self assert: roby size equals: 100 @ 100.
-	self assert: roby position equals: 75 @ 75.
+	self assert: roby position rounded equals: 57 @ 107.
+	
 	redEye := roby children at: 2.
 	self assert: redEye id asSymbol equals: #redEye.
 	self assert: redEye children size equals: 0.
 	self assert: redEye size equals: 25 @ 25.
-	self assert: redEye position equals: 10 @ 10.
+	self assert: redEye position rounded equals: 65 @ 3.
+	
 	greenEye := roby children at: 1.
 	self assert: greenEye id asSymbol equals: #greenEye.
 	self assert: greenEye children size equals: 0.
 	self assert: greenEye size equals: 25 @ 25.
-	self assert: greenEye position equals: 65 @ 10
+	self assert: greenEye position rounded equals: 10 @ 3
 ]
 
 { #category : #tests }
 BlFigmaLoaderTest >> testSimpleRoby [
 
 	| background roby redEye greenEye |
-	background := (BlFigmaLoader loadString:
-		               BlFigmaRobiExamples simpleRoby) rootElement first.
+	background := (BlFigmaLoader loadString: BlFigmaRobiExamples simpleRoby) rootElement first.
 	background computeLayout.
+	
 	self assert: background id asSymbol equals: #background.
 	self assert: background children size equals: 1.
 	self assert: background size equals: 250 @ 250.
+	
 	roby := background children at: 1.
 	self assert: roby id asSymbol equals: #roby.
 	self assert: roby children size equals: 2.
 	self assert: roby size equals: 100 @ 100.
 	self assert: roby position equals: 75 @ 75.
+	
 	redEye := roby children at: 2.
 	self assert: redEye id asSymbol equals: #redEye.
 	self assert: redEye children size equals: 0.
 	self assert: redEye size equals: 25 @ 25.
-	self assert: redEye position equals: 10 @ 10.
+	self assert: redEye position equals: 65 @ 10.
+	
 	greenEye := roby children at: 1.
 	self assert: greenEye id asSymbol equals: #greenEye.
 	self assert: greenEye children size equals: 0.
 	self assert: greenEye size equals: 25 @ 25.
-	self assert: greenEye position equals: 65 @ 10
+	self assert: greenEye position equals: 10 @ 10
 ]
